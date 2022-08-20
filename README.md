@@ -249,3 +249,7 @@ new Keppo(1, 0, 0, true, 'alpha').toString() // returns '1.0.0-alpha'
 new Keppo('1.0.0').increaseMajor(2).toString() // returns '3.0.0'
 new Keppo(1, 0, 0).compare('2.0.0') // returns  -1
 ```
+
+<br>
+
+See the [`test`](https://github.com/igorskyflyer/npm-keppo/tree/main/test) directory for more examples and insight of the `Keppo`'s API capabilities.
