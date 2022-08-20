@@ -1,0 +1,49 @@
+{
+	"name": "@igor.dvlpr/keppo",
+	"version": "1.0.0",
+	"description": "🎡 Parse, manage, compare and output SemVer-compatible version numbers. 🛡",
+	"engines": {
+		"node": ">=12.17"
+	},
+	"sideEffects": false,
+	"main": "./src/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"src"
+	],
+	"scripts": {
+		"test": "mocha --timeout 4000",
+		"pub": "npm test && tsc && npm publish --access public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/igorskyflyer/npm-keppo.git"
+	},
+	"keywords": [
+		"keppo",
+		"version",
+		"semver",
+		"parse",
+		"manage",
+		"output",
+		"project",
+		"igor.dvlpr",
+		"igorskyflyer",
+		"utility"
+	],
+	"author": "Igor Dimitrijević",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/igorskyflyer/npm-keppo/issues"
+	},
+	"homepage": "https://github.com/igorskyflyer/npm-keppo#readme",
+	"devDependencies": {
+		"@types/chai": "^4.3.1",
+		"@types/mocha": "^9.1.1",
+		"@types/node": "^12.17.0",
+		"chai": "^4.3.6",
+		"mocha": "^10.0.0",
+		"typescript": "^4.7.4"
+	}
+}
