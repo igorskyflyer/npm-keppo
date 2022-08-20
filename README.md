@@ -235,3 +235,17 @@ toString(): string
 ```
 
 Formats the current `Keppo` object as a String.
+
+<br>
+<br>
+
+## Usage
+
+```js
+const { Keppo } = require('@igor.dvlpr/keppo')
+
+new Keppo(1, 0, 0).toString() // returns '1.0.0'
+new Keppo(1, 0, 0, true, 'alpha').toString() // returns '1.0.0-alpha'
+new Keppo('1.0.0').increaseMajor(2).toString() // returns '3.0.0'
+new Keppo(1, 0, 0).compare('2.0.0') // returns  -1
+```
