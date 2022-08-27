@@ -212,4 +212,28 @@ describe('🧪 Keppo tests 🧪', () => {
   it('#51 should return true', () => {
     chai.equal(new Keppo('1.0.32').maxIncreasePatch(), max - 32)
   })
+
+  it('#52 should return true', () => {
+    chai.isTrue(Keppo.isValid('1.0.0'))
+  })
+
+  it('#53 should return true', () => {
+    chai.isTrue(Keppo.isValid('v1.0.0', false))
+  })
+
+  it('#54 should return false', () => {
+    chai.isFalse(Keppo.isValid('v1.0.0'))
+  })
+
+  it('#55 should return false', () => {
+    chai.isFalse(Keppo.isValid(''))
+  })
+
+  it('#56 should return false', () => {
+    chai.isFalse(Keppo.isValid('1.0'))
+  })
+
+  it('#57 should return false', () => {
+    chai.isFalse(Keppo.isValid('version'))
+  })
 })
