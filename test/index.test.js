@@ -1,6 +1,8 @@
 const chai = require('chai').assert
 const { Keppo } = require('../src/index')
 
+const max = Number.MAX_SAFE_INTEGER
+
 describe('🧪 Keppo tests 🧪', () => {
   it('#1 should return "1.0.0"', () => {
     chai.strictEqual(new Keppo(1, 0, 0).toString(), '1.0.0')
@@ -173,5 +175,29 @@ describe('🧪 Keppo tests 🧪', () => {
 
   it('#42 should return 1', () => {
     chai.equal(new Keppo('1.0.1').compare('1.0.0'), 1)
+  })
+
+  it('#43 should return true', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreaseMajor(1))
+  })
+
+  it('#44 should return false', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreaseMajor(max + 1))
+  })
+
+  it('#45 should return true', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreaseMinor(1))
+  })
+
+  it('#46 should return false', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreaseMinor(max + 1))
+  })
+
+  it('#47 should return true', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreasePatch(1))
+  })
+
+  it('#48 should return false', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreasePatch(max + 1))
   })
 })
