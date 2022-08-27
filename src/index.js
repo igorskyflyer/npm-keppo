@@ -337,6 +337,16 @@ class Keppo {
   toString() {
     return `${this.strict ? '' : 'v'}${this.major}.${this.minor}.${this.patch}${formatLabel(this.label)}`
   }
+
+  /**
+   * Checks whether the provided String is a valid SemVer version number. Useful for checking whether a version is valid before calling {@link setVersion()}.
+   * @param {string} version A String representing a SemVer version number
+   * @param {boolean} [isStrict=true] A Boolean representing whether the strict mode is enabled, defaults to **true** and is not inferred from this instance's `strict` property.
+   * @returns {boolean}
+   */
+  isValid(version, isStrict = true) {
+    return isValidVersion(version, isStrict)
+  }
 }
 
 /**
