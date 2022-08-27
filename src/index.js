@@ -347,6 +347,17 @@ class Keppo {
   isValid(version, isStrict = true) {
     return isValidVersion(version, isStrict)
   }
+
+  /**
+   * Checks whether this instance's major version can be safely increased by the given value.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @param {number} major The value to increase by
+   * @returns {boolean}
+   */
+  canIncreaseMajor(major) {
+    return Number.isSafeInteger(this.major + major)
+  }
 }
 
 /**
