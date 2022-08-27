@@ -1,6 +1,6 @@
 {
 	"name": "@igor.dvlpr/keppo",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "🎡 Parse, manage, compare and output SemVer-compatible version numbers. 🛡",
 	"engines": {
 		"node": ">=12.17"
