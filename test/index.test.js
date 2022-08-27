@@ -1,6 +1,8 @@
 const chai = require('chai').assert
 const { Keppo } = require('../src/index')
 
+const max = Number.MAX_SAFE_INTEGER
+
 describe('🧪 Keppo tests 🧪', () => {
   it('#1 should return "1.0.0"', () => {
     chai.strictEqual(new Keppo(1, 0, 0).toString(), '1.0.0')
@@ -173,5 +175,65 @@ describe('🧪 Keppo tests 🧪', () => {
 
   it('#42 should return 1', () => {
     chai.equal(new Keppo('1.0.1').compare('1.0.0'), 1)
+  })
+
+  it('#43 should return true', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreaseMajor(1))
+  })
+
+  it('#44 should return false', () => {
+    chai.isFalse(new Keppo('1.0.1').canIncreaseMajor(max + 1))
+  })
+
+  it('#45 should return true', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreaseMinor(1))
+  })
+
+  it('#46 should return false', () => {
+    chai.isFalse(new Keppo('1.0.1').canIncreaseMinor(max + 1))
+  })
+
+  it('#47 should return true', () => {
+    chai.isTrue(new Keppo('1.0.1').canIncreasePatch(1))
+  })
+
+  it('#48 should return false', () => {
+    chai.isFalse(new Keppo('1.0.1').canIncreasePatch(max + 1))
+  })
+
+  it('#49 should return true', () => {
+    chai.equal(new Keppo('32.0.1').maxIncreaseMajor(), max - 32)
+  })
+
+  it('#50 should return true', () => {
+    chai.equal(new Keppo('1.32.1').maxIncreaseMinor(), max - 32)
+  })
+
+  it('#51 should return true', () => {
+    chai.equal(new Keppo('1.0.32').maxIncreasePatch(), max - 32)
+  })
+
+  it('#52 should return true', () => {
+    chai.isTrue(Keppo.isValid('1.0.0'))
+  })
+
+  it('#53 should return true', () => {
+    chai.isTrue(Keppo.isValid('v1.0.0', false))
+  })
+
+  it('#54 should return false', () => {
+    chai.isFalse(Keppo.isValid('v1.0.0'))
+  })
+
+  it('#55 should return false', () => {
+    chai.isFalse(Keppo.isValid(''))
+  })
+
+  it('#56 should return false', () => {
+    chai.isFalse(Keppo.isValid('1.0'))
+  })
+
+  it('#57 should return false', () => {
+    chai.isFalse(Keppo.isValid('version'))
   })
 })

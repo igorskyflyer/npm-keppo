@@ -337,6 +337,80 @@ class Keppo {
   toString() {
     return `${this.strict ? '' : 'v'}${this.major}.${this.minor}.${this.patch}${formatLabel(this.label)}`
   }
+
+  /**
+   * @static
+   * A static method that checks whether the provided String is a valid SemVer version number. Useful for checking whether a version is valid before calling {@link setVersion()}.
+   * @param {string} version A String representing a SemVer version number
+   * @param {boolean} [isStrict=true] A Boolean representing whether the strict mode is enabled, defaults to **true** and is not inferred from this instance's `strict` property.
+   * @returns {boolean}
+   */
+  static isValid(version, isStrict = true) {
+    return isValidVersion(version, isStrict)
+  }
+
+  /**
+   * Checks whether this instance's major version can be safely increased by the given value.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @param {number} [major=1] The value to increase by
+   * @returns {boolean}
+   */
+  canIncreaseMajor(major = 1) {
+    return Number.isSafeInteger(this.major + major)
+  }
+
+  /**
+   * Checks whether a minor version can be safely increased by the given value.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @param {number} [minor=1] The value to increase by
+   * @returns {boolean}
+   */
+  canIncreaseMinor(minor = 1) {
+    return Number.isSafeInteger(this.minor + minor)
+  }
+
+  /**
+   * Checks whether a patch version can be safely increased by the given value.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @param {number} [patch=1] The value to increase by
+   * @returns {boolean}
+   */
+  canIncreasePatch(patch = 1) {
+    return Number.isSafeInteger(this.patch + patch)
+  }
+
+  /**
+   * Returns the maximum possible value that can be used to increase the major version number.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @returns {number}
+   */
+  maxIncreaseMajor() {
+    return Number.MAX_SAFE_INTEGER - this.major
+  }
+
+  /**
+   * Returns the maximum possible value that can be used to increase the minor version number.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @returns {number}
+   */
+  maxIncreaseMinor() {
+    return Number.MAX_SAFE_INTEGER - this.minor
+  }
+
+  /**
+   * Returns the maximum possible value that can be used to increase the patch version number.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @returns {number}
+   */
+  maxIncreasePatch() {
+    return Number.MAX_SAFE_INTEGER - this.patch
+  }
 }
 
 /**

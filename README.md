@@ -219,6 +219,8 @@ Prints to console the String representation of the current `Keppo` object.
 <br>
 <br>
 
+<a id="set-version"></a>
+
 ```ts
 setVersion(version: string): Keppo
 ```
@@ -239,6 +241,96 @@ Formats the current `Keppo` object as a String.
 <br>
 <br>
 
+```ts
+static isValid(version: string, isStrict: boolean = true): boolean
+```
+
+A static method that checks whether the provided String is a valid SemVer version number. Useful for checking whether a version is valid before calling [`setVersion()`](#set-version).
+
+`version: string` => A String representing a SemVer version number,
+
+`isStrict: boolean` => A Boolean representing whether the strict mode is enabled, defaults to **true** and is not inferred from this instance's `strict` property.
+
+Returns a Boolean result.
+
+<br>
+<br>
+
+```ts
+canIncreaseMajor(major: number = 1): boolean
+```
+
+Checks whether this instance's major version can be safely increased by the given value.
+
+`major: number = 1` => The value to increase by.
+
+Returns a Boolean result.
+
+Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+
+<br>
+<br>
+
+```ts
+canIncreaseMinor(minor: number = 1): boolean
+```
+
+Checks whether this instance's minor version can be safely increased by the given value.
+
+`minor: number = 1` => The value to increase by.
+
+Returns a Boolean result.
+
+Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+
+<br>
+<br>
+
+```ts
+canIncreasePatch(patch: number = 1): boolean
+```
+
+Checks whether this instance's patch version can be safely increased by the given value.
+
+`patch: number = 1` => The value to increase by.
+
+Returns a Boolean result.
+
+Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+
+<br>
+<br>
+
+```ts
+maxIncreaseMajor(): number
+```
+
+Returns the maximum possible value that can be used to increase the major version number.
+
+Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+
+<br>
+<br>
+
+```ts
+maxIncreaseMinor(): number
+```
+
+Returns the maximum possible value that can be used to increase the minor version number.
+
+Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+
+<br>
+<br>
+
+```ts
+maxIncreasePatch(): number
+```
+
+Returns the maximum possible value that can be used to increase the patch version number.
+
+<br>
+
 ## Usage
 
 ```js
@@ -248,6 +340,11 @@ new Keppo(1, 0, 0).toString() // returns '1.0.0'
 new Keppo(1, 0, 0, true, 'alpha').toString() // returns '1.0.0-alpha'
 new Keppo('1.0.0').increaseMajor(2).toString() // returns '3.0.0'
 new Keppo(1, 0, 0).compare('2.0.0') // returns  -1
+new Keppo('1.0.32').maxIncreasePatch() // returns 9007199254740959
+new Keppo('1.0.1').canIncreasePatch(1) // returns true
+// static method
+Keppo.isValid('v1.0.0', false) //returns true
+Keppo.isValid('v1.0.0') // returns false
 ```
 
 <br>
