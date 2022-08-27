@@ -380,6 +380,16 @@ class Keppo {
   canIncreasePatch(patch) {
     return Number.isSafeInteger(this.patch + patch)
   }
+
+  /**
+   * Returns the maximum possible value that can be used to increase the major version number.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @returns {number}
+   */
+  maxIncreaseMajor() {
+    return Number.MAX_SAFE_INTEGER - this.major
+  }
 }
 
 /**
