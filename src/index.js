@@ -400,6 +400,16 @@ class Keppo {
   maxIncreaseMinor() {
     return Number.MAX_SAFE_INTEGER - this.minor
   }
+
+  /**
+   * Returns the maximum possible value that can be used to increase the patch version number.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @returns {number}
+   */
+  maxIncreasePatch() {
+    return Number.MAX_SAFE_INTEGER - this.patch
+  }
 }
 
 /**
