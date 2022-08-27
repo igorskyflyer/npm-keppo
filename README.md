@@ -110,7 +110,7 @@ Throws an exception if the passed parameter is not valid.
  decreaseMajor(major?: number = 1): Keppo
 ```
 
-decreases the major version number for the provided value.
+Decreases the major version number for the provided value.
 
 `major: number = 1` => The major version number to decrease by, defaults to `1`.
 
@@ -123,7 +123,7 @@ Throws an exception if the passed parameter is not valid.
 decreaseMinor(minor?: number = 1): Keppo
 ```
 
-decreases the minor version number for the provided value.
+Decreases the minor version number for the provided value.
 
 `minor: number = 1` => The minor version number to decrease by, defaults to `1`.
 
@@ -136,7 +136,7 @@ Throws an exception if the passed parameter is not valid.
 decreasePatch(patch?: number = 1): Keppo
 ```
 
-decreases the patch version number for the provided value.
+Decreases the patch version number for the provided value.
 
 `patch: number = 1` => The patch version number to decrease by, defaults to `1`.
 
