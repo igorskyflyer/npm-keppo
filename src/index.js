@@ -358,6 +358,17 @@ class Keppo {
   canIncreaseMajor(major) {
     return Number.isSafeInteger(this.major + major)
   }
+
+  /**
+   * Checks whether a minor version can be safely increased by the given value.
+   *
+   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   * @param {number} minor The value to increase by
+   * @returns {boolean}
+   */
+  canIncreaseMinor(minor) {
+    return Number.isSafeInteger(this.minor + minor)
+  }
 }
 
 /**
