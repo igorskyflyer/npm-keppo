@@ -366,7 +366,7 @@ class Keppo {
    * @param {number} [minor=1] The value to increase by
    * @returns {boolean}
    */
-  canIncreaseMinor(minor=1) {
+  canIncreaseMinor(minor = 1) {
     return Number.isSafeInteger(this.minor + minor)
   }
 
@@ -374,10 +374,10 @@ class Keppo {
    * Checks whether a patch version can be safely increased by the given value.
    *
    * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @param {number} patch The value to increase by
+   * @param {number} [patch=1] The value to increase by
    * @returns {boolean}
    */
-  canIncreasePatch(patch) {
+  canIncreasePatch(patch = 1) {
     return Number.isSafeInteger(this.patch + patch)
   }
 
