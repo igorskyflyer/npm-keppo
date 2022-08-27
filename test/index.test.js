@@ -182,7 +182,7 @@ describe('🧪 Keppo tests 🧪', () => {
   })
 
   it('#44 should return false', () => {
-    chai.isTrue(new Keppo('1.0.1').canIncreaseMajor(max + 1))
+    chai.isFalse(new Keppo('1.0.1').canIncreaseMajor(max + 1))
   })
 
   it('#45 should return true', () => {
@@ -190,7 +190,7 @@ describe('🧪 Keppo tests 🧪', () => {
   })
 
   it('#46 should return false', () => {
-    chai.isTrue(new Keppo('1.0.1').canIncreaseMinor(max + 1))
+    chai.isFalse(new Keppo('1.0.1').canIncreaseMinor(max + 1))
   })
 
   it('#47 should return true', () => {
@@ -198,6 +198,6 @@ describe('🧪 Keppo tests 🧪', () => {
   })
 
   it('#48 should return false', () => {
-    chai.isTrue(new Keppo('1.0.1').canIncreasePatch(max + 1))
+    chai.isFalse(new Keppo('1.0.1').canIncreasePatch(max + 1))
   })
 })
