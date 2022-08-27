@@ -201,15 +201,15 @@ describe('🧪 Keppo tests 🧪', () => {
     chai.isFalse(new Keppo('1.0.1').canIncreasePatch(max + 1))
   })
 
-  it('#49 should return false', () => {
+  it('#49 should return true', () => {
     chai.equal(new Keppo('32.0.1').maxIncreaseMajor(), max - 32)
   })
 
-  it('#50 should return false', () => {
+  it('#50 should return true', () => {
     chai.equal(new Keppo('1.32.1').maxIncreaseMinor(), max - 32)
   })
 
-  it('#51 should return false', () => {
+  it('#51 should return true', () => {
     chai.equal(new Keppo('1.0.32').maxIncreasePatch(), max - 32)
   })
 })
