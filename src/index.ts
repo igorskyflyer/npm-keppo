@@ -1,8 +1,9 @@
 const SEMVER = '\\d+\\.\\d+\\.\\d+(?:-[a-z]+){0,1}'
 const REGEXP_SEMVER = new RegExp(`^v?${SEMVER}$`)
 const REGEXP_SEMVER_STRICT = new RegExp(`^${SEMVER}$`)
-const REGEXP_COMPONENT = new RegExp(/^\d+$/)
-const REGEXP_LABEL = new RegExp(/^-{0,1}[a-z]+$/)
+const REGEXP_COMPONENT = /^\d+$/
+const REGEXP_LABEL = /^-{0,1}[a-z]+$/
+const REGEXP_VERSION: RegExp = /v\.*/
 
 /**
  * @see {@link https://semver.org}
@@ -13,7 +14,13 @@ const REGEXP_LABEL = new RegExp(/^-{0,1}[a-z]+$/)
  * @private {boolean} strict
  * @private {string} label
  */
-class Keppo {
+export class Keppo {
+  #major: number
+  #minor: number
+  #patch: number
+  #strict: boolean
+  #label: string
+
   /**
    * Creates a Keppo instance.
    * @constructor
@@ -24,19 +31,25 @@ class Keppo {
    * @param {string} [label=''] Label for the version, no need to prefix with a dash.
    * @throws {TypeError|Error} Throws an exception if any of the passed parameters are not valid.
    */
-  constructor(major = 0, minor = 0, patch = 0, strict = true, label = '') {
-    this.strict = strictMode(strict)
-    this.patch = this.minor = this.major = 0
-    this.label = label || ''
+  constructor(
+    major: number | string = 0,
+    minor: number = 0,
+    patch: number = 0,
+    strict: boolean = true,
+    label: string = ''
+  ) {
+    this.#strict = strictMode(strict)
+    this.#patch = this.#minor = this.#major = 0
+    this.#label = label || ''
 
     if (typeof major === 'string') {
       this.setVersion(major)
-      return this
+      return
     }
 
-    this.major = component(major, 0)
-    this.minor = component(minor, 0)
-    this.patch = component(patch, 0)
+    this.#major = component(major, 0)
+    this.#minor = component(minor, 0)
+    this.#patch = component(patch, 0)
   }
 
   /**
@@ -47,7 +60,7 @@ class Keppo {
    * @throws {TypeError|Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo} Returns a new instance of `Keppo` with the parsed version.
    */
-  parse(version) {
+  parse(version: string): Keppo {
     return new Keppo().setVersion(version)
   }
 
@@ -56,8 +69,8 @@ class Keppo {
    * @param {boolean} [isStrict=true]
    * @returns {Keppo}
    */
-  isStrict(isStrict = true) {
-    this.strict = strictMode(isStrict)
+  isStrict(isStrict: boolean = true): Keppo {
+    this.#strict = strictMode(isStrict)
     return this
   }
 
@@ -67,13 +80,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  increaseMajor(major = 1) {
+  increaseMajor(major: number = 1): Keppo {
     if (!isValidComponent(major)) {
-      throw new Error(`Expected a valid major version number but got "${major}".`)
+      throw new Error(
+        `Expected a valid major version number but got "${major}".`
+      )
     }
 
-    // @ts-ignore
-    this.major += major
+    this.#major += major
     return this
   }
 
@@ -83,12 +97,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  increaseMinor(minor = 1) {
+  increaseMinor(minor: number = 1): Keppo {
     if (!isValidComponent(minor)) {
-      throw new Error(`Expected a valid minor version number but got "${minor}".`)
+      throw new Error(
+        `Expected a valid minor version number but got "${minor}".`
+      )
     }
 
-    this.minor += minor
+    this.#minor += minor
     return this
   }
 
@@ -98,12 +114,12 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  increasePatch(patch = 1) {
+  increasePatch(patch: number = 1): Keppo {
     if (!isValidComponent(patch)) {
       throw new Error(`Expected a valid patch version number got ${patch}.`)
     }
 
-    this.patch += patch
+    this.#patch += patch
     return this
   }
 
@@ -113,13 +129,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  decreaseMajor(major = 1) {
+  decreaseMajor(major: number = 1): Keppo {
     if (!isValidComponent(major)) {
-      throw new Error(`Expected a valid major version number but got "${major}".`)
+      throw new Error(
+        `Expected a valid major version number but got "${major}".`
+      )
     }
 
-    // @ts-ignore
-    this.major = decreaseComponent(this.major, major, 'major')
+    this.#major = decreaseComponent(this.#major, major, 'major')
     return this
   }
 
@@ -129,12 +146,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  decreaseMinor(minor = 1) {
+  decreaseMinor(minor: number = 1): Keppo {
     if (!isValidComponent(minor)) {
-      throw new Error(`Expected a valid minor version number but got "${minor}".`)
+      throw new Error(
+        `Expected a valid minor version number but got "${minor}".`
+      )
     }
 
-    this.minor = decreaseComponent(this.minor, minor, 'minor')
+    this.#minor = decreaseComponent(this.#minor, minor, 'minor')
     return this
   }
 
@@ -144,12 +163,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  decreasePatch(patch = 1) {
+  decreasePatch(patch: number = 1): Keppo {
     if (!isValidComponent(patch)) {
-      throw new Error(`Expected a valid patch version number but got "${patch}".`)
+      throw new Error(
+        `Expected a valid patch version number but got "${patch}".`
+      )
     }
 
-    this.patch = decreaseComponent(this.patch, patch, 'patch')
+    this.#patch = decreaseComponent(this.#patch, patch, 'patch')
     return this
   }
 
@@ -159,13 +180,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns  {Keppo}
    */
-  setMajor(major) {
+  setMajor(major: number | string): Keppo {
     if (!isValidComponent(major)) {
-      throw new Error(`Expected a valid major version number but got "${major}".`)
+      throw new Error(
+        `Expected a valid major version number but got "${major}".`
+      )
     }
 
-    // @ts-ignore
-    this.major = +major
+    this.#major = +major
     return this
   }
 
@@ -175,13 +197,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns  {Keppo}
    */
-  setMinor(minor) {
+  setMinor(minor: number | string): Keppo {
     if (!isValidComponent(minor)) {
-      throw new Error(`Expected a valid minor version number but got "${minor}".`)
+      throw new Error(
+        `Expected a valid minor version number but got "${minor}".`
+      )
     }
 
-    // @ts-ignore
-    this.minor = +minor
+    this.#minor = +minor
     return this
   }
 
@@ -191,13 +214,14 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns  {Keppo}
    */
-  setPatch(patch) {
+  setPatch(patch: number | string): Keppo {
     if (!isValidComponent(patch)) {
-      throw new Error(`Expected a valid patch version number but got "${patch}".`)
+      throw new Error(
+        `Expected a valid patch version number but got "${patch}".`
+      )
     }
 
-    // @ts-ignore
-    this.patch = +patch
+    this.#patch = +patch
     return this
   }
 
@@ -207,7 +231,7 @@ class Keppo {
    * @throws {Error} Throws an exception if the passed parameter is not valid.
    * @returns {Keppo}
    */
-  setLabel(label) {
+  setLabel(label: string): Keppo {
     if (typeof label !== 'string') {
       throw new TypeError(`Expected a string but got "${typeof label}".`)
     }
@@ -222,7 +246,7 @@ class Keppo {
       label = label.substring(1)
     }
 
-    this.label = label
+    this.#label = label
     return this
   }
 
@@ -235,44 +259,42 @@ class Keppo {
    * - `0` if the compared versions are equal,
    * - `1` if the current instance version is greater than the provided version.
    */
-  compare(version) {
-    const versionType = typeof version
-
-    if (versionType !== 'string' && versionType !== 'object') {
-      throw new TypeError(`Expected either a Keppo instance or a valid SemVer string but got "${versionType}".`)
+  compare(version: Keppo | string): number {
+    if (typeof version !== 'string' && typeof version !== 'object') {
+      throw new TypeError(
+        `Expected either a Keppo instance or a valid SemVer string but got "${typeof version}".`
+      )
     }
 
-    /** @type {Keppo} */
-    let parsedVersion
+    let parsedVersion: Keppo
 
-    if (versionType === 'string') {
-      // @ts-ignore
-      if (!isValidVersion(version)) {
-        throw new Error(`Expected a valid SemVer version but got "${version}", strict mode: ${this.isStrict}.`)
+    if (typeof version === 'string') {
+      if (!isValidVersion(version.toString())) {
+        throw new Error(
+          `Expected a valid SemVer version but got "${version}", strict mode: ${this.isStrict}.`
+        )
       }
 
-      // @ts-ignore
       parsedVersion = this.parse(version)
     } else {
-      // @ts-ignore
       parsedVersion = version
     }
 
-    if (this.major > parsedVersion.major) {
+    if (this.#major > parsedVersion.#major) {
       return 1
-    } else if (this.major < parsedVersion.major) {
+    } else if (this.#major < parsedVersion.#major) {
       return -1
     }
 
-    if (this.minor > parsedVersion.minor) {
+    if (this.#minor > parsedVersion.#minor) {
       return 1
-    } else if (this.minor < parsedVersion.minor) {
+    } else if (this.#minor < parsedVersion.#minor) {
       return -1
     }
 
-    if (this.patch > parsedVersion.patch) {
+    if (this.#patch > parsedVersion.#patch) {
       return 1
-    } else if (this.patch < parsedVersion.patch) {
+    } else if (this.#patch < parsedVersion.#patch) {
       return -1
     }
 
@@ -283,7 +305,8 @@ class Keppo {
    * Prints to console the String representation of the current `Keppo` object.
    * @returns {void}
    */
-  output() {
+  output(): void {
+    // biome-ignore lint/suspicious/noConsole: Needed for output
     console.log(this.toString())
   }
 
@@ -295,7 +318,7 @@ class Keppo {
    * @returns {Keppo}
    * @throws {TypeError|Error} Throws an exception if the passed parameter is not valid or the passed parameter is not a valid SemVer version.
    */
-  setVersion(version) {
+  setVersion(version: string): Keppo {
     if (typeof version !== 'string') {
       throw new TypeError(`Expected a string but got "${typeof version}".`)
     }
@@ -303,7 +326,9 @@ class Keppo {
     // always assume strict = false,
     // to avoid false positives
     if (!isValidVersion(version, false)) {
-      throw new Error(`Expected a valid SemVer version but got "${version}", strict mode: ${this.strict}.`)
+      throw new Error(
+        `Expected a valid SemVer version but got "${version}", strict mode: ${this.#strict}.`
+      )
     }
 
     const components = version.trim().toLowerCase().split('.')
@@ -314,7 +339,7 @@ class Keppo {
       this.isStrict(true)
     }
 
-    this.setMajor(components[0].replace(/v\.*/, ''))
+    this.setMajor(components[0].replace(REGEXP_VERSION, ''))
     this.setMinor(components[1])
 
     let labelIndex = components[2].indexOf('-')
@@ -334,8 +359,8 @@ class Keppo {
    * Formats the current `Keppo` object as a String.
    * @returns {string}
    */
-  toString() {
-    return `${this.strict ? '' : 'v'}${this.major}.${this.minor}.${this.patch}${formatLabel(this.label)}`
+  toString(): string {
+    return `${this.#strict ? '' : 'v'}${this.#major}.${this.#minor}.${this.#patch}${formatLabel(this.#label)}`
   }
 
   /**
@@ -345,7 +370,7 @@ class Keppo {
    * @param {boolean} [isStrict=true] A Boolean representing whether the strict mode is enabled, defaults to **true** and is not inferred from this instance's `strict` property.
    * @returns {boolean}
    */
-  static isValid(version, isStrict = true) {
+  static isValid(version: string, isStrict: boolean = true): boolean {
     return isValidVersion(version, isStrict)
   }
 
@@ -356,8 +381,8 @@ class Keppo {
    * @param {number} [major=1] The value to increase by
    * @returns {boolean}
    */
-  canIncreaseMajor(major = 1) {
-    return Number.isSafeInteger(this.major + major)
+  canIncreaseMajor(major: number = 1): boolean {
+    return Number.isSafeInteger(this.#major + major)
   }
 
   /**
@@ -367,8 +392,8 @@ class Keppo {
    * @param {number} [minor=1] The value to increase by
    * @returns {boolean}
    */
-  canIncreaseMinor(minor = 1) {
-    return Number.isSafeInteger(this.minor + minor)
+  canIncreaseMinor(minor: number = 1): boolean {
+    return Number.isSafeInteger(this.#minor + minor)
   }
 
   /**
@@ -378,8 +403,8 @@ class Keppo {
    * @param {number} [patch=1] The value to increase by
    * @returns {boolean}
    */
-  canIncreasePatch(patch = 1) {
-    return Number.isSafeInteger(this.patch + patch)
+  canIncreasePatch(patch: number = 1): boolean {
+    return Number.isSafeInteger(this.#patch + patch)
   }
 
   /**
@@ -388,8 +413,8 @@ class Keppo {
    * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
    * @returns {number}
    */
-  maxIncreaseMajor() {
-    return Number.MAX_SAFE_INTEGER - this.major
+  maxIncreaseMajor(): number {
+    return Number.MAX_SAFE_INTEGER - this.#major
   }
 
   /**
@@ -398,8 +423,8 @@ class Keppo {
    * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
    * @returns {number}
    */
-  maxIncreaseMinor() {
-    return Number.MAX_SAFE_INTEGER - this.minor
+  maxIncreaseMinor(): number {
+    return Number.MAX_SAFE_INTEGER - this.#minor
   }
 
   /**
@@ -408,8 +433,8 @@ class Keppo {
    * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
    * @returns {number}
    */
-  maxIncreasePatch() {
-    return Number.MAX_SAFE_INTEGER - this.patch
+  maxIncreasePatch(): number {
+    return Number.MAX_SAFE_INTEGER - this.#patch
   }
 }
 
@@ -418,7 +443,7 @@ class Keppo {
  * @param {string|number} component
  * @returns {boolean}
  */
-function isValidComponent(component) {
+function isValidComponent(component: string | number): boolean {
   const componentType = typeof component
 
   return (
@@ -433,28 +458,29 @@ function isValidComponent(component) {
  * @param {number} defaultValue
  * @returns {number}
  */
-function component(component, defaultValue) {
-  const componentType = typeof component
-
-  if (componentType === 'undefined') {
+function component(component: number | string, defaultValue: number): number {
+  if (typeof component === 'undefined') {
     return defaultValue
   }
 
-  if (componentType === 'number') {
+  if (typeof component === 'number') {
     if (!Number.isSafeInteger(component)) {
-      throw new RangeError(`Expected a safe integer value but got ${component}.`)
+      throw new RangeError(
+        `Expected a safe integer value but got ${component}.`
+      )
     }
 
-    // @ts-ignore
     return component
-  } else if (componentType === 'string') {
+  } else if (typeof component === 'string') {
     if (!REGEXP_COMPONENT.test(component.toString())) {
       throw new Error(`Expected a valid SemVer version but got "${component}".`)
     }
 
     return +component
   } else {
-    throw new TypeError(`Expected a argument of either String or Number type but got ${componentType}.`)
+    throw new TypeError(
+      `Expected a argument of either String or Number type but got ${typeof component}.`
+    )
   }
 }
 
@@ -463,7 +489,7 @@ function component(component, defaultValue) {
  * @param {string} label
  * @returns {string}
  */
-function formatLabel(label) {
+function formatLabel(label: string): string {
   if (!label) {
     return ''
   }
@@ -479,7 +505,11 @@ function formatLabel(label) {
  * @throws {Error}
  * @returns {Number}
  */
-function decreaseComponent(component, value, componentName) {
+function decreaseComponent(
+  component: number,
+  value: number,
+  componentName: string
+): number {
   if (typeof component !== 'number' || typeof value !== 'number') {
     throw new TypeError('Expected both parameters to be numbers.')
   }
@@ -487,7 +517,9 @@ function decreaseComponent(component, value, componentName) {
   const result = component - value
 
   if (result < 0) {
-    throw new Error(`Expected ${componentName} version number to be positive but got "${result}".`)
+    throw new Error(
+      `Expected ${componentName} version number to be positive but got "${result}".`
+    )
   }
 
   return result
@@ -498,7 +530,7 @@ function decreaseComponent(component, value, componentName) {
  * @param {string} version
  * @returns {boolean}
  */
-function isValidVersion(version, isStrict = true) {
+function isValidVersion(version: string, isStrict = true): boolean {
   if (strictMode(isStrict)) {
     return REGEXP_SEMVER_STRICT.test(version)
   } else {
@@ -511,12 +543,10 @@ function isValidVersion(version, isStrict = true) {
  * @param {boolean} isStrict
  * @returns {boolean}
  */
-function strictMode(isStrict = true) {
+function strictMode(isStrict: boolean = true): boolean {
   if (typeof isStrict !== 'boolean') {
     return true
   } else {
     return isStrict
   }
 }
-
-module.exports = { Keppo }
