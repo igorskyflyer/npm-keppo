@@ -1,18 +1,69 @@
-## `🎡 Keppo(1.x.x) 🧮`
-
-<sub>🎡 Parse, manage, compare and output SemVer-compatible version numbers. 🧮</sub>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/igorskyflyer/npm-keppo/main/media/keppo.png" alt="Icon of Keppo" width="256" height="256">
+  <h1>Keppo</h1>
+</div>
 
 <br>
 
-Install it by running
+<h4 align="center">
+  🎡 Parse, manage, compare and output SemVer-compatible version numbers. 🛡
+</h4>
 
-```shell
-npm i "@igor.dvlpr/keppo"
+<br>
+<br>
+
+## 📃 Table of Contents
+
+- [**Features**](#-features)
+- [**Usage**](#-usage)
+- [**API**](#-api)
+- [**Examples**](#️-examples)
+- [**Changelog**](#-changelog)
+- [**Support**](#-support)
+- [**License**](#-license)
+- [**Related**](#-related)
+- [**Author**](#-author)
+
+<br>
+<br>
+
+## 🤖 Features
+
+- 🔢 parses and validates SemVer strings like '1.2.3' or 'v2.0.0-alpha'
+- 🧠 supports strict and loose mode for version parsing
+- ⬆️ increases major, minor or patch version safely
+- ⬇️ decreases version components with safety checks
+- 🏷️ sets and formats version labels like 'alpha' or 'beta'
+- 🔍 compares versions and returns -1, 0 or 1
+- 🧪 checks if a version is valid before using it
+- 🧮 calculates max safe increment for each component
+- 🧾 prints version as a string with optional 'v' prefix
+- 🛡️ ensures all components are safe integers
+
+<br>
+<br>
+
+## 🕵🏼 Usage
+
+Install it by executing any of the following, depending on your preferred package manager:
+
+```bash
+pnpm add @igorskyflyer/keppo
+```
+
+```bash
+yarn add @igorskyflyer/keppo
+```
+
+```bash
+npm i @igorskyflyer/keppo
 ```
 
 <br>
+<br>
 
-### API
+## 🤹🏼 API
+
 
 There are 2 available constructors:
 
@@ -266,7 +317,7 @@ Checks whether this instance's major version can be safely increased by the give
 
 Returns a Boolean result.
 
-Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
 <br>
 <br>
@@ -281,7 +332,7 @@ Checks whether this instance's minor version can be safely increased by the give
 
 Returns a Boolean result.
 
-Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
 <br>
 <br>
@@ -296,7 +347,7 @@ Checks whether this instance's patch version can be safely increased by the give
 
 Returns a Boolean result.
 
-Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
 <br>
 <br>
@@ -307,7 +358,7 @@ maxIncreaseMajor(): number
 
 Returns the maximum possible value that can be used to increase the major version number.
 
-Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
 <br>
 <br>
@@ -318,7 +369,7 @@ maxIncreaseMinor(): number
 
 Returns the maximum possible value that can be used to increase the minor version number.
 
-Read more about Integer safety on [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
+Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
 <br>
 <br>
@@ -330,11 +381,13 @@ maxIncreasePatch(): number
 Returns the maximum possible value that can be used to increase the patch version number.
 
 <br>
+<br>
 
-## Usage
+## 🗒️ Examples
 
-```js
-const { Keppo } = require('@igor.dvlpr/keppo')
+
+```ts
+import { Keppo } from '@igorskyflyer/keppo'
 
 new Keppo(1, 0, 0).toString() // returns '1.0.0'
 new Keppo(1, 0, 0, true, 'alpha').toString() // returns '1.0.0-alpha'
@@ -348,5 +401,72 @@ Keppo.isValid('v1.0.0') // returns false
 ```
 
 <br>
+<br>
 
-See the [`test`](https://github.com/igorskyflyer/npm-keppo/tree/main/test) directory for more examples and insight of the `Keppo`'s API capabilities.
+## 📝 Changelog
+
+📑 The changelog is available here, [**CHANGELOG**](https://github.com/igorskyflyer/npm-keppo/blob/main/CHANGELOG.md).
+
+<br>
+<br>
+
+## 🪪 License
+
+Licensed under the [**MIT license**](https://github.com/igorskyflyer/npm-keppo/blob/main/LICENSE).
+
+<br>
+<br>
+
+## 💖 Support
+
+<div align="center">
+  I work hard for every project, including this one and your support means a lot to me!
+  <br>
+  Consider buying me a coffee. ☕
+  <br>
+  <br>
+  <a href="https://ko-fi.com/igorskyflyer" target="_blank"><img src="https://raw.githubusercontent.com/igorskyflyer/igorskyflyer/main/assets/ko-fi.png" alt="Donate to igorskyflyer" width="180" height="46"></a>
+  <br>
+  <br>
+  <em>Thank you for supporting my efforts!</em> 🙏😊
+</div>
+
+<br>
+<br>
+
+## 🧬 Related
+
+[**@igorskyflyer/common-color**](https://www.npmjs.com/package/@igorskyflyer/common-color)
+
+> _🎨 Provides common Color-related TypeScript types. 🌈_
+
+<br>
+
+[**@igorskyflyer/rawelement**](https://www.npmjs.com/package/@igorskyflyer/rawelement)
+
+> _🐯 A utility that lets you manipulate HTML elements, their attributes and innerHTML as strings, on the go and then render the modified HTML. Very useful in SSG projects. 💤_
+
+<br>
+
+[**@igorskyflyer/str-is-in**](https://www.npmjs.com/package/@igorskyflyer/str-is-in)
+
+> _🧵 Provides ways of checking whether a String is present in an Array of Strings using custom Comparators. 🔍_
+
+<br>
+
+[**@igorskyflyer/common-color**](https://www.npmjs.com/package/@igorskyflyer/common-color)
+
+> _🎨 Provides common Color-related TypeScript types. 🌈_
+
+<br>
+
+[**@igorskyflyer/clone**](https://www.npmjs.com/package/@igorskyflyer/clone)
+
+> _🧬 A lightweight JavaScript utility allowing deep copy-by-value of nested objects, arrays and arrays of objects. 🪁_
+
+<br>
+<br>
+<br>
+
+## 👨🏻‍💻 Author
+Created by **Igor Dimitrijević** ([*@igorskyflyer*](https://github.com/igorskyflyer/)).
