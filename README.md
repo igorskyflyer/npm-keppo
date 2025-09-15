@@ -452,9 +452,9 @@ Licensed under the [**MIT license**](https://github.com/igorskyflyer/npm-keppo/b
 
 <br>
 
-[**@igorskyflyer/common-color**](https://www.npmjs.com/package/@igorskyflyer/common-color)
+[**@igor.dvlpr/recursive-readdir**](https://www.npmjs.com/package/@igor.dvlpr/recursive-readdir)
 
-> _🎨 Provides common Color-related TypeScript types. 🌈_
+> _📖 Provides recursive readdir() and readdirSync() functions. 📁_
 
 <br>
 
