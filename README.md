@@ -10,7 +10,6 @@
 </h4>
 
 <br>
-<br>
 
 ## 📃 Table of Contents
 
@@ -24,7 +23,6 @@
 - [**Related**](#-related)
 - [**Author**](#-author)
 
-<br>
 <br>
 
 ## 🤖 Features
