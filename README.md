@@ -95,9 +95,7 @@ constructor(
 
 `label?: string = ''` - optional label (e.g. `'alpha'`, `'beta.1'`), no dash prefix needed.
 
-Throws if any component is invalid or violates SemVer rules.
-
-and
+Throws if any component is invalid or violates SemVer rules.  
 
 ```ts
 constructor(version: string)
