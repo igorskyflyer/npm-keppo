@@ -601,7 +601,7 @@ Licensed under the [**MIT license**](https://github.com/igorskyflyer/npm-keppo/b
 
 <br>
 
-[**@igor.dvlpr/recursive-readdir**](https://www.npmjs.com/package/@igor.dvlpr/recursive-readdir)
+[**@igorskyflyer/recursive-readdir**](https://www.npmjs.com/package/@igorskyflyer/recursive-readdir)
 
 > _📖 Provides recursive readdir() and readdirSync() functions. 📁_
 
