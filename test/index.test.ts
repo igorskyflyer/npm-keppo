@@ -1,7 +1,7 @@
 import { assert, describe, it } from 'vitest'
 import { Keppo } from '../src/index.js'
 
-const max = Number.MAX_SAFE_INTEGER
+const max: number = Number.MAX_SAFE_INTEGER
 
 describe('🧪 Keppo tests 🧪', () => {
   it('#1 should return "1.0.0"', () => {
@@ -32,8 +32,8 @@ describe('🧪 Keppo tests 🧪', () => {
   })
 
   it('#7 should return "1.2.3"', () => {
-    const instance = new Keppo()
-    assert.strictEqual(instance.parse('1.2.3').toString(), '1.2.3')
+    const instance = new Keppo(0, 0, 0)
+    assert.strictEqual(instance.setVersion('1.2.3').toString(), '1.2.3')
   })
 
   it('#8 should return "2.0.0"', () => {
@@ -244,5 +244,49 @@ describe('🧪 Keppo tests 🧪', () => {
 
   it('#57 should return false', () => {
     assert.isFalse(Keppo.isValid('version'))
+  })
+
+  it('#58 should return true', () => {
+    assert.equal(
+      new Keppo(1, 2, 3, false, 'alpha.1-beta').toString(),
+      'v1.2.3-alpha.1-beta'
+    )
+  })
+
+  it('#59 should return true', () => {
+    assert.equal(
+      new Keppo(1, 2, 3, true, 'alpha.1-beta').toString(),
+      '1.2.3-alpha.1-beta'
+    )
+  })
+
+  it('#60 should throw', () => {
+    assert.throws(() => new Keppo(1, 0, 0, true, '🔥hotfix'), TypeError)
+  })
+
+  it('#61 should return true', () => {
+    assert.equal(new Keppo(1, 0, 0, true, 'beta.1').toString(), '1.0.0-beta.1')
+  })
+
+  it('#62 should return true', () => {
+    assert.equal(new Keppo(1, 0, 0, false, 'alpha').toString(), 'v1.0.0-alpha')
+  })
+
+  it('#63 should throw', () => {
+    assert.throws(() => new Keppo(-1, 5, 6, true), RangeError)
+  })
+
+  it('#64 should throw', () => {
+    assert.throws(() => new Keppo('-1.2.3'), RangeError)
+  })
+
+  it('#65 should return true', () => {
+    const instance: Keppo = Keppo.from('1.2.3-alpha')
+    assert.equal(instance.toString(), '1.2.3-alpha')
+  })
+
+  it('#66 should create instance from valid version string', () => {
+    const instance: Keppo = Keppo.from('1.2.3-alpha')
+    assert.equal(instance.toString(), '1.2.3-alpha')
   })
 })
