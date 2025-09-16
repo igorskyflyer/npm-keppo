@@ -12,13 +12,11 @@ export enum KeppoComparison {
 }
 
 /**
- * @see {@link https://semver.org}
- * @class Keppo
- * @private {number} major
- * @private {number} minor
- * @private {number} patch
- * @private {boolean} strict
- * @private {string} label
+ * A fluent, chainable SemVer utility for parsing, mutating, and comparing version strings.
+ *
+ * Implements core SemVer logic with optional strict mode and label support.
+ *
+ * See {@link https://semver.org} for specification details.
  */
 export class Keppo {
   static VERSION: string = '2.0.0'
@@ -29,6 +27,18 @@ export class Keppo {
   #strict: boolean
   #label: string
 
+  /**
+   * Creates a new `Keppo` instance from individual version components.
+   *
+   * Accepts `major`, `minor`, and `patch` numbers, with optional `strict` mode and label.
+   *
+   * @param major - Major version number
+   * @param minor - Minor version number (default: `0`)
+   * @param patch - Patch version number (default: `0`)
+   * @param strict - Enables strict parsing mode (default: `true`)
+   * @param label - Optional label (e.g. `'alpha'`, `'beta.1'`), no dash prefix needed
+   * @throws {Error} If any component is invalid or violates SemVer rules
+   */
   constructor(
     major: number,
     minor: number,
@@ -36,17 +46,15 @@ export class Keppo {
     strict?: boolean,
     label?: string
   )
-  constructor(version: string)
   /**
-   * Creates a Keppo instance.
-   * @constructor
-   * @param {number|string} major Major version number or a valid SemVer version string - other parameters are ignored in this case.
-   * @param {number} [minor=0] Minor version number.
-   * @param {number} [patch=0] Patch version number.
-   * @param {boolean} [strict=true] Strict mode.
-   * @param {string} [label=''] Label for the version, no need to prefix with a dash.
-   * @throws {TypeError|Error} Throws an exception if any of the passed parameters are not valid.
+   * Creates a new `Keppo` instance from a full SemVer string.
+   *
+   * Parses the string and sets all version components and label accordingly.
+   *
+   * @param version - A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`)
+   * @throws {Error} If the string is invalid or fails SemVer parsing
    */
+  constructor(version: string)
   constructor(
     major: number | string = 0,
     minor: number = 0,
@@ -69,14 +77,43 @@ export class Keppo {
     this.setLabel(label)
   }
 
+  /**
+   * Creates a new `Keppo` instance from a valid SemVer string.
+   *
+   * Equivalent to `new Keppo(...).setVersion(version)` but more fluent.
+   *
+   * @param version - A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
+   * @param strict - Optional flag to enable strict parsing mode.
+   * @throws {RangeError} If the version string is invalid.
+   * @returns A fully initialized `Keppo` instance.
+   */
   static from(version: string, strict?: boolean): Keppo {
     return new Keppo(0, 0, 0, strict).setVersion(version)
   }
 
   /**
-   * Sets the strict mode for the SemVer version, i.e. allow `v` as a prefix for SemVer, e.g. `v1.0.0`. By default, strict mode is `true`.
-   * @param {boolean} [isStrict=true]
-   * @returns {Keppo}
+   * Checks whether a given string is a valid SemVer version.
+   *
+   * Useful for validating a version before calling {@link setVersion()} or instantiating a `Keppo` instance.
+   *
+   * Strict mode is not inferred from the current instance - pass explicitly if needed.
+   *
+   * @param version - A SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`)
+   * @param isStrict - Whether to enable strict parsing (default: `true`)
+   * @returns `true` if the version is valid; otherwise `false`
+   */
+  static isValid(version: string, isStrict: boolean = true): boolean {
+    return isValidVersion(version, isStrict)
+  }
+
+  /**
+   * Sets the strict mode for SemVer parsing.
+   *
+   * When enabled, version strings must follow strict SemVer format (e.g. no `v` prefix).
+   * When disabled, relaxed formats like `v1.0.0` are accepted.
+   *
+   * @param isStrict - Whether to enable strict mode (default: `true`)
+   * @returns The current `Keppo` instance for chaining
    */
   isStrict(isStrict: boolean = true): Keppo {
     this.#strict = strictMode(isStrict)
@@ -84,10 +121,13 @@ export class Keppo {
   }
 
   /**
-   * Increases the major version number for the provided value.
-   * @param {number} [major=1] The major version number to increase by, defaults to `1`.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Increases the major version number by the specified amount.
+   *
+   * Resets the minor and patch components to `0` after incrementing.
+   *
+   * @param major - The amount to increase by (default: `1`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid or exceeds safe integer limits
    */
   increaseMajor(major: number = 1): Keppo {
     if (!isValidComponent(major)) {
@@ -104,10 +144,13 @@ export class Keppo {
   }
 
   /**
-   * Increases the minor version number for the provided value.
-   * @param {number} [minor=1] The minor version number to increase by, defaults to `1`.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Increases the minor version number by the specified amount.
+   *
+   * Resets the patch component to `0` after incrementing.
+   *
+   * @param minor - The amount to increase by (default: `1`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid or exceeds safe integer limits
    */
   increaseMinor(minor: number = 1): Keppo {
     if (!isValidComponent(minor)) {
@@ -123,10 +166,11 @@ export class Keppo {
   }
 
   /**
-   * Increases the patch version number for the provided value.
-   * @param {number} [patch=1] The patch version number to increase by, defaults to `1`.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Increases the patch version number by the specified amount.
+   *
+   * @param patch - The amount to increase by (default: `1`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid or exceeds safe integer limits
    */
   increasePatch(patch: number = 1): Keppo {
     if (!isValidComponent(patch)) {
@@ -140,10 +184,13 @@ export class Keppo {
   }
 
   /**
-   * Decreases the major version number for the provided value.
-   * @param {number} [major=1] The major version number to decrease by, defaults to `1`.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Decreases the major version number by the specified amount.
+   *
+   * Resets the minor and patch components to `0` after decrementing.
+   *
+   * @param major - The amount to decrease by (default: `1`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid or results in a negative version
    */
   decreaseMajor(major: number = 1): Keppo {
     if (!isValidComponent(major)) {
@@ -157,10 +204,13 @@ export class Keppo {
   }
 
   /**
-   * Decreases the minor version number for the provided value.
-   * @param {number} [minor=1] The minor version number to decrease by, defaults to `1`.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Decreases the minor version number by the specified amount.
+   *
+   * Resets the patch component to `0` after decrementing.
+   *
+   * @param minor - The amount to decrease by (default: `1`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid or results in a negative minor version
    */
   decreaseMinor(minor: number = 1): Keppo {
     if (!isValidComponent(minor)) {
@@ -174,10 +224,11 @@ export class Keppo {
   }
 
   /**
-   * Decrease the patch version number for the provided value.
-   * @param {number} [patch=1] The patch version number to decrease by, defaults to `1`.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Decreases the patch version number by the specified amount.
+   *
+   * @param patch - The amount to decrease by (default: `1`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid or results in a negative patch version
    */
   decreasePatch(patch: number = 1): Keppo {
     if (!isValidComponent(patch)) {
@@ -191,10 +242,13 @@ export class Keppo {
   }
 
   /**
-   * Sets the major version number for the current Keppo instance.
-   * @param {number|string} major The major version number, either as a number or as a string.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns  {Keppo}
+   * Sets the major version number for the current `Keppo` instance.
+   *
+   * Accepts either a number or a numeric string. Resets the minor and patch components to `0`.
+   *
+   * @param major - The major version, as a number or string (e.g. `2` or `'2'`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid, non-numeric, or negative
    */
   setMajor(major: number | string): Keppo {
     if (!isValidComponent(major)) {
@@ -208,10 +262,13 @@ export class Keppo {
   }
 
   /**
-   * Sets the minor version number for the current Keppo instance.
-   * @param {number|string} minor The minor version number, either as a number or as a string.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns  {Keppo}
+   * Sets the minor version number for the current `Keppo` instance.
+   *
+   * Accepts either a number or a numeric string. Resets the patch component to `0`.
+   *
+   * @param minor - The minor version, as a number or string (e.g. `3` or `'3'`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid, non-numeric, or negative
    */
   setMinor(minor: number | string): Keppo {
     if (!isValidComponent(minor)) {
@@ -225,10 +282,13 @@ export class Keppo {
   }
 
   /**
-   * Sets the patch version number for the current Keppo instance.
-   * @param {number|string} patch The patch version number, either as a number or as a string.
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns  {Keppo}
+   * Sets the patch version number for the current `Keppo` instance.
+   *
+   * Accepts either a number or a numeric string. Does not affect other version components.
+   *
+   * @param patch - The patch version, as a number or string (e.g. `4` or `'4'`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the value is invalid, non-numeric, or negative
    */
   setPatch(patch: number | string): Keppo {
     if (!isValidComponent(patch)) {
@@ -242,14 +302,20 @@ export class Keppo {
   }
 
   /**
-   * Sets the version label for the current Keppo instance. No need to prefix with a dash "`-`", i.e. "`alpha`" and its output would be `0.1.0-alpha`.
-   * @param {string} label
-   * @throws {Error} Throws an exception if the passed parameter is not valid.
-   * @returns {Keppo}
+   * Sets the version label for the current `Keppo` instance.
+   *
+   * The label will be appended to the version string with a dash (e.g. `'alpha'` → `0.1.0-alpha`).
+   * No need to include the dash manually.
+   *
+   * @param label - A valid label string (e.g. `'alpha'`, `'beta.1'`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the label is invalid or fails pattern validation
    */
   setLabel(label: string): Keppo {
     if (typeof label !== 'string') {
-      throw new TypeError(`Expected a valid label but got "${label}".`)
+      throw new TypeError(
+        `Expected a valid label type but got "${typeof label}".`
+      )
     }
 
     if (label.length === 0) {
@@ -259,7 +325,7 @@ export class Keppo {
     label = label.trim()
 
     if (!REGEXP_LABEL.test(label)) {
-      throw new TypeError(`Expected a valid label but got "${label}".`)
+      throw new RangeError(`Expected a valid label value but got "${label}".`)
     }
 
     if (label.charAt(0) === '-') {
@@ -270,20 +336,28 @@ export class Keppo {
     return this
   }
 
+  /**
+   * Clears the label of the current Keppo instance.
+   * @returns The current `Keppo` instance.
+   */
   clearLabel(): Keppo {
     return this.setLabel('')
   }
 
   /**
-   * Compares the current `Keppo` SemVer-compatible version with a provided one. The passed argument can either be another instance of `Keppo` or a valid SemVer string.
-   * @param {Keppo|string} version
-   * @throws {Error} Throws an exception if the passed parameter is not valid or the passed parameter is not a valid SemVer version.
-   * @returns {Number} A value defined as:
-   * - `-1` if the current instance version is less than the provided version,
-   * - `0` if the compared versions are equal,
-   * - `1` if the current instance version is greater than the provided version.
+   * Compares the current `Keppo` version against another version.
    *
-   * `KeppoComparison` can be imported for a better DX.
+   * Accepts either another `Keppo` instance or a valid SemVer string.
+   * Returns a numeric comparison result:
+   * - `-1` if the current version is older
+   * - `0` if both versions are equal
+   * - `1` if the current version is newer
+   *
+   * For improved readability, use the `KeppoComparison` enum.
+   *
+   * @param version - A `Keppo` instance or SemVer string to compare against
+   * @returns A numeric comparison result (`-1`, `0`, or `1`)
+   * @throws {Error} If the input is invalid or not a valid SemVer
    */
   compareWith(version: Keppo | string): KeppoComparison {
     if (typeof version !== 'string' && typeof version !== 'object') {
@@ -337,12 +411,15 @@ export class Keppo {
   }
 
   /**
-   * Sets the current Keppo version. The passed value must be a valid SemVer string. This will replace all the previous version information.
+   * Sets the current version for the `Keppo` instance.
    *
-   * See also {@link parse()}.
-   * @param {string} version
-   * @returns {Keppo}
-   * @throws {TypeError|Error} Throws an exception if the passed parameter is not valid or the passed parameter is not a valid SemVer version.
+   * Replaces all existing version components and label with values parsed from the provided SemVer string.
+   *
+   * See also {@link Keppo.from()}.
+   *
+   * @param version - A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-beta.1'`)
+   * @returns The current `Keppo` instance for chaining
+   * @throws {Error} If the string is invalid or fails SemVer parsing
    */
   setVersion(version: string): Keppo {
     if (typeof version !== 'string') {
@@ -380,8 +457,8 @@ export class Keppo {
   }
 
   /**
-   * Resets the current Keppo instance's SemVer version to `0.0.0`.
-   * @returns
+   * Resets the current Keppo instance's SemVer version to `0.0.0` and label to an empty string.
+   * @returns The current `Keppo` instance.
    */
   reset(): Keppo {
     return this.setVersion('0.0.0').setLabel('')
@@ -396,85 +473,87 @@ export class Keppo {
   }
 
   /**
-   * @static
-   * A static method that checks whether the provided String is a valid SemVer version number. Useful for checking whether a version is valid before calling {@link setVersion()}.
-   * @param {string} version A String representing a SemVer version number
-   * @param {boolean} [isStrict=true] A Boolean representing whether the strict mode is enabled, defaults to **true** and is not inferred from this instance's `strict` property.
-   * @returns {boolean}
-   */
-  static isValid(version: string, isStrict: boolean = true): boolean {
-    return isValidVersion(version, isStrict)
-  }
-
-  /**
-   * Checks whether this instance's major version can be safely increased by the given value.
+   * Checks whether the major version can be safely increased by the given amount.
    *
-   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @param {number} [major=1] The value to increase by
-   * @returns {boolean}
+   * Uses `Number.isSafeInteger()` to ensure the result stays within JavaScript's safe integer range.
+   *
+   * Read more on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   *
+   * @param major - The amount to increase by (default: `1`)
+   * @returns `true` if the increment is safe; otherwise `false`
    */
   canIncreaseMajor(major: number = 1): boolean {
     return Number.isSafeInteger(this.#major + major)
   }
 
   /**
-   * Checks whether a minor version can be safely increased by the given value.
+   * Checks whether the minor version can be safely increased by the given amount.
    *
-   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @param {number} [minor=1] The value to increase by
-   * @returns {boolean}
+   * Uses `Number.isSafeInteger()` to ensure the result remains within JavaScript's safe integer range.
+   *
+   * Read more on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   *
+   * @param minor - The amount to increase by (default: `1`)
+   * @returns `true` if the increment is safe; otherwise `false`
    */
   canIncreaseMinor(minor: number = 1): boolean {
     return Number.isSafeInteger(this.#minor + minor)
   }
 
   /**
-   * Checks whether a patch version can be safely increased by the given value.
+   * Checks whether the patch version can be safely increased by the given amount.
    *
-   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @param {number} [patch=1] The value to increase by
-   * @returns {boolean}
+   * Uses `Number.isSafeInteger()` to ensure the result remains within JavaScript's safe integer range.
+   *
+   * Read more on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   *
+   * @param patch - The amount to increase by (default: `1`)
+   * @returns `true` if the increment is safe; otherwise `false`
    */
   canIncreasePatch(patch: number = 1): boolean {
     return Number.isSafeInteger(this.#patch + patch)
   }
 
   /**
-   * Returns the maximum possible value that can be used to increase the major version number.
+   * Returns the maximum safe value that can be used to increase the major version number.
    *
-   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @returns {number}
+   * Based on JavaScript's `Number.MAX_SAFE_INTEGER`, which ensures arithmetic remains precise.
+   *
+   * Read more on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   *
+   * @returns The maximum safe increment value for the major version
    */
   maxIncreaseMajor(): number {
     return Number.MAX_SAFE_INTEGER - this.#major
   }
 
   /**
-   * Returns the maximum possible value that can be used to increase the minor version number.
+   * Returns the maximum safe value that can be used to increase the minor version number.
    *
-   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @returns {number}
+   * Based on JavaScript’s `Number.MAX_SAFE_INTEGER`, ensuring arithmetic remains precise.
+   *
+   * Read more on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   *
+   * @returns The maximum safe increment value for the minor version
    */
   maxIncreaseMinor(): number {
     return Number.MAX_SAFE_INTEGER - this.#minor
   }
 
   /**
-   * Returns the maximum possible value that can be used to increase the patch version number.
+   * Returns the maximum safe value that can be used to increase the patch version number.
    *
-   * Read more about Integer safety on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
-   * @returns {number}
+   * Based on JavaScript’s `Number.MAX_SAFE_INTEGER`, ensuring arithmetic remains precise.
+   *
+   * Read more on {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger MDN}.
+   *
+   * @returns The maximum safe increment value for the patch version
    */
   maxIncreasePatch(): number {
     return Number.MAX_SAFE_INTEGER - this.#patch
   }
 }
 
-/**
- * @private
- * @param {string|number} component
- * @returns {boolean}
- */
 function isValidComponent(component: string | number): boolean {
   if (
     typeof component === 'number' &&
@@ -491,12 +570,6 @@ function isValidComponent(component: string | number): boolean {
   return false
 }
 
-/**
- * @private
- * @param {number|string} component
- * @param {number} defaultValue
- * @returns {number}
- */
 function component(component: number | string, defaultValue: number): number {
   if (typeof component === 'undefined') {
     return defaultValue
@@ -525,11 +598,6 @@ function component(component: number | string, defaultValue: number): number {
   }
 }
 
-/**
- * @private
- * @param {string} label
- * @returns {string}
- */
 function formatLabel(label: string): string {
   if (!label) {
     return ''
@@ -538,14 +606,6 @@ function formatLabel(label: string): string {
   return `-${label}`
 }
 
-/**
- * @private
- * @param {number} component
- * @param {number} value
- * @param {string} componentName
- * @throws {Error}
- * @returns {Number}
- */
 function decreaseComponent(
   component: number,
   value: number,
@@ -566,11 +626,6 @@ function decreaseComponent(
   return result
 }
 
-/**
- * @private
- * @param {string} version
- * @returns {boolean}
- */
 function isValidVersion(version: string, isStrict = true): boolean {
   if (strictMode(isStrict)) {
     return REGEXP_SEMVER_STRICT.test(version)
@@ -579,11 +634,6 @@ function isValidVersion(version: string, isStrict = true): boolean {
   }
 }
 
-/**
- * @private
- * @param {boolean} isStrict
- * @returns {boolean}
- */
 function strictMode(isStrict: boolean = true): boolean {
   if (typeof isStrict !== 'boolean') {
     return true
