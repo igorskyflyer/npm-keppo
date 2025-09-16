@@ -95,6 +95,8 @@ constructor(
 
 `label?: string = ''` - optional label (e.g. `'alpha'`, `'beta.1'`), no dash prefix needed.
 
+<br>
+
 > Throws if any component is invalid or violates SemVer rules.  
 
 <br>
@@ -105,6 +107,8 @@ constructor(version: string)
 ```
 
 `version: string` - a valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
+
+<br>
 
 > Throws if the string is invalid or fails SemVer parsing.
 
@@ -121,6 +125,8 @@ Equivalent to `new Keppo(...).setVersion(version)` but more fluent.
 `version: string` - a valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
 
 `strict?: boolean` - optional flag to enable strict parsing mode.
+
+<br>
 
 > Throws if the version string is invalid.
 
@@ -170,6 +176,8 @@ Resets the `minor` and `patch` components to `0` after incrementing.
 
 `major: number = 1` - the amount to increase by (default: `1`)
 
+<br>
+
 > Throws if the value is invalid or exceeds safe integer limits.
 
 <br>
@@ -184,6 +192,8 @@ Resets the `patch` component to `0` after incrementing.
 
 `minor: number = 1` - the amount to increase by (default: `1`).
 
+<br>
+
 > Throws if the value is invalid or exceeds safe integer limits.
 
 <br>
@@ -196,6 +206,8 @@ increasePatch(patch?: number = 1): Keppo
 Increases the patch version number by the specified amount.
 
 `patch: number = 1` - The amount to increase by (default: `1`).
+
+<br>
 
 > Throws if the value is invalid or exceeds safe integer limits.
 
@@ -211,6 +223,8 @@ Resets the minor and patch components to `0` after decrementing.
 
 `major: number = 1` - the amount to decrease by (default: `1`).
 
+<br>
+
 > Throws if the value is invalid or results in a negative version.
 
 <br>
@@ -225,6 +239,8 @@ Resets the patch component to `0` after decrementing.
 
 `minor: number = 1` - the amount to decrease by (default: `1`).
 
+<br>
+
 > Throws an exception if the passed parameter is not valid.
 
 <br>
@@ -237,6 +253,8 @@ decreasePatch(patch?: number = 1): Keppo
 Decreases the patch version number by the specified amount.
 
 `patch: number = 1` - the amount to decrease by (default: `1`).
+
+<br>
 
 > Throws if the value is invalid or results in a negative patch version.
 
@@ -251,6 +269,8 @@ Sets the major version number for the current Keppo instance.
 
 `major: number ` - the major version as a number (e.g. `2`).
 
+<br>
+
 > Throws if the value is invalid, non-numeric, or negative.
 
 <br>
@@ -264,6 +284,8 @@ Sets the minor version number for the current `Keppo` instance.
 
 `minor: number` - the minor version, as a number (e.g. `3`).
 
+<br>
+
 > Throws if the value is invalid, non-numeric, or negative.
 
 <br>
@@ -276,6 +298,8 @@ setPatch(patch: number): Keppo
 Sets the patch version number for the current `Keppo` instance.
 
 `patch: number` - the patch version, as a number (e.g. `4`).
+
+<br>
 
 > Throws if the value is invalid, non-numeric, or negative.
 
@@ -291,6 +315,8 @@ The label will be appended to the version string with a dash (e.g. `'alpha'` →
 No need to include the dash manually.
 
 `label: string` - a valid label string (e.g. `'alpha'`, `'beta.1'`).
+
+<br>
 
 > Throws if the label is invalid or fails pattern validation.
 
@@ -316,6 +342,8 @@ For improved readability, use the `KeppoComparison` enum.
 
 `version: Keppo` - another `Keppo` instance to compare against.
 
+<br>
+
 > Throws if the input is invalid.
 
 Returns a value of `KeppoComparison` defined as:
@@ -336,6 +364,8 @@ Compares the current `Keppo` version against a SemVer string.
 For improved readability, use the `KeppoComparison` enum.
 
 `version: string` - a valid SemVer string (e.g. `'1.2.3-beta.1'`) to compare against.
+
+<br>
 
 > Throws if the input is not a valid SemVer string.
 
@@ -365,6 +395,8 @@ setVersion(version: string): Keppo
 
 Sets the current version for the `Keppo` instance.  
 Replaces all existing version components and label with values parsed from the provided SemVer string.
+
+<br>
 
 > Throws an exception if the passed parameter is not valid or the passed parameter is not a valid SemVer version.
 
