@@ -30,6 +30,9 @@ export enum KeppoComparison {
  * See {@link https://semver.org} for specification details.
  */
 export class Keppo {
+  /**
+   * The internal version of the Keppo engine.
+   */
   static VERSION: string = '2.0.0'
 
   #major: number
