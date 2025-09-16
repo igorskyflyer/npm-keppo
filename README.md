@@ -6,7 +6,7 @@
 <br>
 
 <h4 align="center">
-  🎡 Parse, manage, compare and output SemVer-compatible version numbers. 🛡
+  🎡 A SemVer engine with a fluent API to parse, manage, compare, and output version numbers. 🛡
 </h4>
 
 <br>
@@ -27,7 +27,7 @@
 
 ## 🤖 Features
 
-`Keppo` is a fluent SemVer engine - every method returns the instance, so you can chain mutations like *poetry*:
+`Keppo` is a fluent SemVer engine, every method returns the instance, so you can chain mutations like *poetry*:
 
 `keppo.ts`
 ```ts
@@ -85,20 +85,15 @@ constructor(
 )
 ```
 
-`major: number`
-Major version number (default: `0`).
+`major: number` - major version number (default: `0`).
 
-`minor: number`
-Minor version number (default: `0`).
+`minor: number` - minor version number (default: `0`).
 
-`patch: number`
-Patch version number (default: `0`).
+`patch: number` - patch version number (default: `0`).
 
-`strict?: boolean = true`
-Enables strict parsing mode (default: `true`).
+`strict?: boolean = true` - enables strict parsing mode (default: `true`).
 
-`label?: string = ''`
-Optional label (e.g. `'alpha'`, `'beta.1'`), no dash prefix needed.
+`label?: string = ''` - optional label (e.g. `'alpha'`, `'beta.1'`), no dash prefix needed.
 
 Throws if any component is invalid or violates SemVer rules.
 
@@ -108,8 +103,7 @@ and
 constructor(version: string)
 ```
 
-`version: string`
-A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
+`version: string` - a valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
 
 Throws if the string is invalid or fails SemVer parsing.
 
@@ -123,10 +117,9 @@ static from(version: string, strict?: boolean): Keppo
 Creates a new `Keppo` instance from a valid SemVer string.  
 Equivalent to `new Keppo(...).setVersion(version)` but more fluent.
 
-`version: string`
-A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
+`version: string` - a valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
 
-`strict?: boolean` - Optional flag to enable strict parsing mode.
+`strict?: boolean` - optional flag to enable strict parsing mode.
 
 Throws if the version string is invalid.
 
@@ -226,9 +219,10 @@ Throws if the value is invalid or results in a negative version.
 decreaseMinor(minor?: number = 1): Keppo
 ```
 
-Decreases the minor version number for the provided value.
+Decreases the minor version number by the specified amount.  
+Resets the patch component to `0` after decrementing.
 
-`minor: number = 1` => The minor version number to decrease by, defaults to `1`.
+`minor: number = 1` - the amount to decrease by (default: `1`).
 
 Throws an exception if the passed parameter is not valid.
 
