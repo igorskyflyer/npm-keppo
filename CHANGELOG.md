@@ -8,10 +8,11 @@
 
 - **❌ BREAKING**: remove the `parse()` method - use the `constructor` or the new static `Keppo.from()` function instead
 - **❌ BREAKING**: rename `compare()` to `compareWith()` for semantic clarity
+- **❌ BREAKING**: rename `isStrict()` to `setStrict()` for semantic clarity
 
 <br>
 
-- **✨ feat**: auto-reset lower components (`minor` / `patch`) when `major` or `minor` changes
+- **✨ feat**: auto-reset lower components (`minor` / `patch`) when `major` or `minor` change
 - **✨ feat**: align `SemVer` RegExp with **full** specification compliance
 - **✨ feat**: add a static instantiation helper `Keppo.from()`
 - **✨ feat**: `compareWith()` now returns `KeppoComparison` enum (`Older` = -1, `Current` = 0, `Newer` = 1) instead of raw numbers
