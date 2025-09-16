@@ -1,49 +1,72 @@
 {
-	"name": "@igor.dvlpr/keppo",
-	"version": "1.1.0",
-	"description": "🎡 Parse, manage, compare and output SemVer-compatible version numbers. 🛡",
-	"engines": {
-		"node": ">=12.17"
-	},
-	"sideEffects": false,
-	"main": "./src/index.js",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"dist",
-		"src"
-	],
-	"scripts": {
-		"test": "mocha --timeout 4000",
-		"pub": "npm test && tsc && npm publish --access public"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/igorskyflyer/npm-keppo.git"
-	},
-	"keywords": [
-		"keppo",
-		"version",
-		"semver",
-		"parse",
-		"manage",
-		"output",
-		"project",
-		"igor.dvlpr",
-		"igorskyflyer",
-		"utility"
-	],
-	"author": "Igor Dimitrijević",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/igorskyflyer/npm-keppo/issues"
-	},
-	"homepage": "https://github.com/igorskyflyer/npm-keppo#readme",
-	"devDependencies": {
-		"@types/chai": "^4.3.1",
-		"@types/mocha": "^9.1.1",
-		"@types/node": "^12.17.0",
-		"chai": "^4.3.6",
-		"mocha": "^10.0.0",
-		"typescript": "^4.7.4"
-	}
+    "name": "@igorskyflyer/keppo",
+    "version": "2.0.0",
+    "description": "🎡 A SemVer engine with a fluent API to parse, manage, compare, and output version numbers. 🧮",
+    "sideEffects": false,
+    "engines": {
+        "node": ">=22.0"
+    },
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "test": "vitest --run",
+        "pub": "pnpm test && git push origin main --tags"
+    },
+    "keywords": [
+        "alpha",
+        "beta",
+        "canary",
+        "dev-tools",
+        "fluent-api",
+        "igor dimitrijević",
+        "igorskyflyer",
+        "keppo",
+        "latest",
+        "lightweight",
+        "minimal",
+        "modular",
+        "next",
+        "open-source",
+        "rc",
+        "semver-engine",
+        "semver",
+        "stable",
+        "strict-mode",
+        "type-safe",
+        "typed",
+        "typescript",
+        "utilities",
+        "version-comparison",
+        "version-parser",
+        "version-utils",
+        "versioning"
+    ],
+    "license": "MIT",
+    "author": "Igor Dimitrijević <support@igorskyflyer.me> (https://github.com/igorskyflyer)",
+    "funding": "https://ko-fi.com/igorskyflyer",
+    "homepage": "https://github.com/igorskyflyer/npm-keppo",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/igorskyflyer/npm-keppo.git"
+    },
+    "bugs": {
+        "url": "https://github.com/igorskyflyer/npm-keppo/issues"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^2.2.2",
+        "@igorskyflyer/biome-config": "^2.1.0",
+        "@types/node": "^22.18.0",
+        "typescript": "^5.9.2",
+        "vitest": "^3.2.4"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "packageManager": "pnpm@10.15.0"
 }
