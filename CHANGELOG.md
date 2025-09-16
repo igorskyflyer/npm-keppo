@@ -13,6 +13,7 @@
 
 - **✨ feat**: changes to the `major` or `minor` component now auto-reset the lower components (`minor` / `patch`)
 - **✨ feat**: add a static instantiation helper `Keppo.from()`
+- **✨ feat**: `compareWith()` now returns `KeppoComparison` enum (`Older` = -1, `Current` = 0, `Newer` = 1) instead of raw numbers
 - **✨ feat**: add the `clearLabel()` method
 - **✨ feat**: add the `reset()` method - resets the `version` to `0.0.0` and `label` to a blank string
 
@@ -34,5 +35,6 @@
 - **💻 dev**: add `KeppoComparison` enum to be used as the result of `compareWith()`
 - **💻 dev**: upgrade Node to >= v22
 - **💻 dev**: upgrade dependencies
+- **💻 dev**: update all JSDocs
 - **💻 dev**: update all tests to use the new API
 - **💻 dev**: add tests for new methods
