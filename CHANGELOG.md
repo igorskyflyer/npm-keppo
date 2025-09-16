@@ -9,6 +9,7 @@
 - **❌ BREAKING**: remove the `parse()` method - use the `constructor` or the new static `Keppo.from()` function instead
 - **❌ BREAKING**: rename `compare()` to `compareWith()` for semantic clarity
 - **❌ BREAKING**: rename `isStrict()` to `setStrict()` for semantic clarity
+- **❌ BREAKING**: change the signatures of `setMajor()`, `setMinor()` and `setPatch()` to only accept numbers
 
 <br>
 
