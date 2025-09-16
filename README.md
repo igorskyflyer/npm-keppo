@@ -97,6 +97,9 @@ constructor(
 
 Throws if any component is invalid or violates SemVer rules.  
 
+<br>
+<br>
+
 ```ts
 constructor(version: string)
 ```
