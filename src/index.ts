@@ -256,13 +256,11 @@ export class Keppo {
   /**
    * Sets the major version number for the current `Keppo` instance.
    *
-   * Accepts either a number or a numeric string. Resets the minor and patch components to `0`.
-   *
-   * @param major - The major version, as a number or string (e.g. `2` or `'2'`).
+   * @param major - The major version as a number (e.g. `2`).
    * @throws {Error} If the value is invalid, non-numeric, or negative.
    * @returns The current `Keppo` instance.
    */
-  setMajor(major: number | string): Keppo {
+  setMajor(major: number): Keppo {
     if (!isValidComponent(major)) {
       throw new RangeError(
         `Expected a valid major version number but got "${major}".`
@@ -276,13 +274,11 @@ export class Keppo {
   /**
    * Sets the minor version number for the current `Keppo` instance.
    *
-   * Accepts either a number or a numeric string. Resets the patch component to `0`.
-   *
-   * @param minor - The minor version, as a number or string (e.g. `3` or `'3'`).
+   * @param minor - The minor version, as a number (e.g. `3`).
    * @throws {Error} If the value is invalid, non-numeric, or negative.
    * @returns The current `Keppo` instance.
    */
-  setMinor(minor: number | string): Keppo {
+  setMinor(minor: number): Keppo {
     if (!isValidComponent(minor)) {
       throw new RangeError(
         `Expected a valid minor version number but got "${minor}".`
@@ -296,13 +292,11 @@ export class Keppo {
   /**
    * Sets the patch version number for the current `Keppo` instance.
    *
-   * Accepts either a number or a numeric string. Does not affect other version components.
-   *
-   * @param patch - The patch version, as a number or string (e.g. `4` or `'4'`).
+   * @param patch - The patch version, as a number (e.g. `4`).
    * @throws {Error} If the value is invalid, non-numeric, or negative.
    * @returns The current `Keppo` instance.
    */
-  setPatch(patch: number | string): Keppo {
+  setPatch(patch: number): Keppo {
     if (!isValidComponent(patch)) {
       throw new RangeError(
         `Expected a valid patch version number but got "${patch}".`
@@ -357,9 +351,8 @@ export class Keppo {
   }
 
   /**
-   * Compares the current `Keppo` version against another version.
+   * Compares the current `Keppo` version against another `Keppo` instance.
    *
-   * Accepts either another `Keppo` instance or a valid SemVer string.
    * Returns a numeric comparison result:
    * - `-1` if the current version is older
    * - `0` if both versions are equal
@@ -367,10 +360,28 @@ export class Keppo {
    *
    * For improved readability, use the `KeppoComparison` enum.
    *
-   * @param version - A `Keppo` instance or SemVer string to compare against.
-   * @throws {Error} If the input is invalid or not a valid SemVer.
+   * @param version - Another `Keppo` instance to compare against.
+   * @throws {Error} If the input is invalid.
    * @returns A numeric comparison result (`-1`, `0`, or `1`).
    */
+  compareWith(version: Keppo): KeppoComparison
+
+  /**
+   * Compares the current `Keppo` version against a SemVer string.
+   *
+   * Returns a numeric comparison result:
+   * - `-1` if the current version is older
+   * - `0` if both versions are equal
+   * - `1` if the current version is newer
+   *
+   * For improved readability, use the `KeppoComparison` enum.
+   *
+   * @param version - A valid SemVer string (e.g. `'1.2.3-beta.1'`) to compare against.
+   * @throws {Error} If the input is not a valid SemVer string.
+   * @returns A numeric comparison result (`-1`, `0`, or `1`).
+   */
+  compareWith(version: string): KeppoComparison
+
   compareWith(version: Keppo | string): KeppoComparison {
     if (typeof version !== 'string' && typeof version !== 'object') {
       throw new TypeError(
@@ -446,7 +457,7 @@ export class Keppo {
       )
     }
 
-    const components = version.trim().toLowerCase().split('.')
+    const components: string[] = version.trim().toLowerCase().split('.')
 
     if (components[0].charAt(0) === 'v') {
       this.setStrict(false)
@@ -454,10 +465,13 @@ export class Keppo {
       this.setStrict(true)
     }
 
-    this.setMajor(components[0].replace(REGEXP_VERSION, ''))
-    this.setMinor(components[1])
+    const major: number = Number(components[0].replace(REGEXP_VERSION, ''))
+    const minor: number = Number(components[1])
 
-    let labelIndex = components[2].indexOf('-')
+    this.setMajor(major)
+    this.setMinor(minor)
+
+    let labelIndex: number = components[2].indexOf('-')
 
     if (labelIndex > -1) {
       this.setLabel(components[2].substring(components[2].indexOf('-') + 1))
@@ -465,7 +479,9 @@ export class Keppo {
       labelIndex = components[2].length
     }
 
-    return this.setPatch(components[2].substring(0, labelIndex))
+    const patch: number = Number(components[2].substring(0, labelIndex))
+
+    return this.setPatch(patch)
   }
 
   /**
@@ -627,7 +643,7 @@ function decreaseComponent(
     throw new TypeError('Expected both parameters to be numbers.')
   }
 
-  const result = component - value
+  const result: number = component - value
 
   if (result < 0) {
     throw new RangeError(
