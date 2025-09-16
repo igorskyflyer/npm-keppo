@@ -127,7 +127,7 @@ Returns a fully initialized `Keppo` instance.
 <br>
 
 ```ts
-static isStrict(isStrict?: boolean = true): Keppo
+static isValid(version: string, isStrict: boolean = true): boolean
 ```
 
 Checks whether a given string is a valid SemVer version.  
@@ -231,50 +231,50 @@ Throws an exception if the passed parameter is not valid.
 decreasePatch(patch?: number = 1): Keppo
 ```
 
-Decreases the patch version number for the provided value.
+Decreases the patch version number by the specified amount.
 
-`patch: number = 1` => The patch version number to decrease by, defaults to `1`.
+`patch: number = 1` - the amount to decrease by (default: `1`).
 
-Throws an exception if the passed parameter is not valid.
+Throws if the value is invalid or results in a negative patch version.
 
 <br>
 <br>
 
 ```ts
-setMajor(major: number | string): Keppo
+setMajor(major: number): Keppo
 ```
 
 Sets the major version number for the current Keppo instance.
 
-`major: number | string` => The major version number, either as a number or as a string.
+`major: number ` - the major version as a number (e.g. `2`).
 
-Throws an exception if the passed parameter is not valid.
-
-<br>
-<br>
-
-```ts
-setMinor(minor: number | string): Keppo
-```
-
-Sets the minor version number for the current Keppo instance.
-
-`minor: number | string` => The minor version number, either as a number or as a string.
-
-Throws an exception if the passed parameter is not valid.
+Throws if the value is invalid, non-numeric, or negative.
 
 <br>
 <br>
 
 ```ts
-setPatch(patch: number | string): Keppo
+setMinor(minor: number): Keppo
 ```
 
-Sets the patch version number for the current Keppo instance.
+Sets the minor version number for the current `Keppo` instance.
 
-`patch: number | string` => The patch version number, either as a number or as a string.
+`minor: number` - the minor version, as a number (e.g. `3`).
 
-Throws an exception if the passed parameter is not valid.
+Throws if the value is invalid, non-numeric, or negative.
+
+<br>
+<br>
+
+```ts
+setPatch(patch: number): Keppo
+```
+
+Sets the patch version number for the current `Keppo` instance.
+
+`patch: number` - the patch version, as a number (e.g. `4`).
+
+Throws if the value is invalid, non-numeric, or negative.
 
 <br>
 <br>
@@ -283,28 +283,64 @@ Throws an exception if the passed parameter is not valid.
 setLabel(label: string): Keppo
 ```
 
-Sets the version label for the current Keppo instance. No need to prefix with a dash "`-`", i.e. "`alpha`" and its output would be `0.1.0-alpha`.
+Sets the version label for the current `Keppo` instance.  
+The label will be appended to the version string with a dash (e.g. `'alpha'` → `0.1.0-alpha`).  
+No need to include the dash manually.
 
-Throws an exception if the passed parameter is not valid.
+`label: string` - a valid label string (e.g. `'alpha'`, `'beta.1'`).
+
+Throws if the label is invalid or fails pattern validation.
 
 <br>
 <br>
 
 ```ts
-compareWith(version: Keppo | string): KeppoComparison
+clearLabel(): Keppo
 ```
 
-Compares the current `Keppo` SemVer-compatible version with a provided one. The passed argument can either be another instance of `Keppo` or a valid SemVer string.
+Clears the label of the current Keppo instance.
+
+<br>
+<br>
+
+```ts
+compareWith(version: Keppo): KeppoComparison
+```
+
+Compares the current `Keppo` version against another `Keppo` instance.  
+
+For improved readability, use the `KeppoComparison` enum.
+
+`version: Keppo` - another `Keppo` instance to compare against.
+
+Throws if the input is invalid.
 
 Returns a value of `KeppoComparison` defined as:
 
-- `-1` if the current instance version is less than the provided version,
-- `0` if the compared versions are equal,
-- `1` if the current instance version is greater than the provided version.
+- `-1` if the current version is older
+- `0` if both versions are equal,
+- `1` if the current version is newer.
 
 <br>
+<br>
 
-`KeppoComparison` can be imported for a better DX.
+```ts
+compareWith(version: string): KeppoComparison
+```
+
+Compares the current `Keppo` version against a SemVer string.  
+
+For improved readability, use the `KeppoComparison` enum.
+
+`version: string` - a valid SemVer string (e.g. `'1.2.3-beta.1'`) to compare against.
+
+Throws if the input is not a valid SemVer string.
+
+Returns a value of `KeppoComparison` defined as:
+
+- `-1` if the current version is older
+- `0` if both versions are equal,
+- `1` if the current version is newer.
 
 <br>
 <br>
@@ -324,9 +360,14 @@ Prints to console the String representation of the current `Keppo` object.
 setVersion(version: string): Keppo
 ```
 
-Sets the current Keppo version. The passed value must be a valid SemVer string. This will replace all the previous version information.
+Sets the current version for the `Keppo` instance.  
+Replaces all existing version components and label with values parsed from the provided SemVer string.
 
 Throws an exception if the passed parameter is not valid or the passed parameter is not a valid SemVer version.
+
+`version: string` - a valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-beta.1'`).
+
+Throws if the string is invalid or fails SemVer parsing.
 
 <br>
 <br>
@@ -341,29 +382,15 @@ Formats the current `Keppo` object as a String.
 <br>
 
 ```ts
-static isValid(version: string, isStrict: boolean = true): boolean
-```
-
-A static method that checks whether the provided String is a valid SemVer version number. Useful for checking whether a version is valid before calling [`setVersion()`](#set-version).
-
-`version: string` => A String representing a SemVer version number,
-
-`isStrict: boolean` => A Boolean representing whether the strict mode is enabled, defaults to **true** and is not inferred from this instance's `strict` property.
-
-Returns a Boolean result.
-
-<br>
-<br>
-
-```ts
 canIncreaseMajor(major: number = 1): boolean
 ```
 
-Checks whether this instance's major version can be safely increased by the given value.
+Checks whether the major version can be safely increased by the given amount.  
+Uses `Number.isSafeInteger()` to ensure the result stays within JavaScript's safe integer range.
 
-`major: number = 1` => The value to increase by.
+`major: number = 1` - the amount to increase by (default: `1`).
 
-Returns a Boolean result.
+Returns `true` if the increment is safe; otherwise `false`.
 
 Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
@@ -374,11 +401,12 @@ Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/
 canIncreaseMinor(minor: number = 1): boolean
 ```
 
-Checks whether this instance's minor version can be safely increased by the given value.
+Checks whether the minor version can be safely increased by the given amount.  
+Uses `Number.isSafeInteger()` to ensure the result remains within JavaScript's safe integer range.
 
-`minor: number = 1` => The value to increase by.
+`minor: number = 1` - the amount to increase by (default: `1`).
 
-Returns a Boolean result.
+Returns `true` if the increment is safe; otherwise `false`.
 
 Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
@@ -389,11 +417,12 @@ Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/
 canIncreasePatch(patch: number = 1): boolean
 ```
 
-Checks whether this instance's patch version can be safely increased by the given value.
+Checks whether the patch version can be safely increased by the given amount.  
+Uses `Number.isSafeInteger()` to ensure the result remains within JavaScript's safe integer range.
 
-`patch: number = 1` => The value to increase by.
+`patch: number = 1` - the amount to increase by (default: `1`).
 
-Returns a Boolean result.
+Returns `true` if the increment is safe; otherwise `false`.
 
 Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
@@ -404,7 +433,8 @@ Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/
 maxIncreaseMajor(): number
 ```
 
-Returns the maximum possible value that can be used to increase the major version number.
+Returns the maximum safe value that can be used to increase the major version number.  
+Based on JavaScript's `Number.MAX_SAFE_INTEGER`, which ensures arithmetic remains precise.
 
 Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
@@ -415,7 +445,8 @@ Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/
 maxIncreaseMinor(): number
 ```
 
-Returns the maximum possible value that can be used to increase the minor version number.
+Returns the maximum safe value that can be used to increase the minor version number.  
+Based on JavaScript’s `Number.MAX_SAFE_INTEGER`, ensuring arithmetic remains precise.
 
 Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger).
 
@@ -426,7 +457,8 @@ Read more about Integer safety on [**MDN**](https://developer.mozilla.org/en-US/
 maxIncreasePatch(): number
 ```
 
-Returns the maximum possible value that can be used to increase the patch version number.
+Returns the maximum safe value that can be used to increase the patch version number.  
+Based on JavaScript’s `Number.MAX_SAFE_INTEGER`, ensuring arithmetic remains precise.
 
 <br>
 <br>
