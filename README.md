@@ -6,7 +6,7 @@
 <br>
 
 <h4 align="center">
-  🎡 A SemVer engine with a fluent API to parse, manage, compare, and output version numbers. 🛡
+  🎡 A SemVer engine with a fluent API to parse, manage, compare, and output version numbers. 🧮
 </h4>
 
 <br>
