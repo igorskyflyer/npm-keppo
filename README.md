@@ -116,6 +116,15 @@ constructor(version: string)
 <br>
 
 ```ts
+static VERSION: string
+```
+
+Returns the internal version of the Keppo engine.
+
+<br>
+<br>
+
+```ts
 static from(version: string, strict?: boolean): Keppo
 ```
 
@@ -356,6 +365,20 @@ Returns a value of `KeppoComparison` defined as:
 <br>
 
 ```ts
+enum KeppoComparison {
+  Older = -1, // the current version is less than the compared version
+  Current = 0, // both versions are equal
+  Newer = 1 // the current version is greater than the compared version
+}
+```
+
+Enum representing the result of a version comparison.  
+Used by `compareWith()` to indicate whether the current version is older, equal to, or newer than the target version.
+
+<br>
+<br>
+
+```ts
 compareWith(version: string): KeppoComparison
 ```
 
@@ -403,6 +426,15 @@ Replaces all existing version components and label with values parsed from the p
 `version: string` - a valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-beta.1'`).
 
 Throws if the string is invalid or fails SemVer parsing.
+
+<br>
+<br>
+
+```ts
+reset(): Keppo
+```
+
+Resets the current Keppo instance's SemVer version to `0.0.0` and label to an empty string.
 
 <br>
 <br>
