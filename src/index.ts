@@ -5,6 +5,15 @@ const REGEXP_COMPONENT = /^\d+$/
 const REGEXP_LABEL = /^([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)$/
 const REGEXP_VERSION: RegExp = /v\.*/
 
+/**
+ * Represents the result of a version comparison between two `Keppo` instances or SemVer strings.
+ *
+ * - `Older (-1)`: The current version is less than the compared version
+ * - `Current (0)`: Both versions are equal
+ * - `Newer (1)`: The current version is greater than the compared version
+ *
+ * Used to improve readability when working with `compareWith()` results.
+ */
 export enum KeppoComparison {
   Older = -1,
   Current = 0,
@@ -381,24 +390,24 @@ export class Keppo {
     }
 
     if (this.#major > parsedVersion.#major) {
-      return 1
+      return KeppoComparison.Newer
     } else if (this.#major < parsedVersion.#major) {
-      return -1
+      return KeppoComparison.Older
     }
 
     if (this.#minor > parsedVersion.#minor) {
-      return 1
+      return KeppoComparison.Newer
     } else if (this.#minor < parsedVersion.#minor) {
-      return -1
+      return KeppoComparison.Older
     }
 
     if (this.#patch > parsedVersion.#patch) {
-      return 1
+      return KeppoComparison.Newer
     } else if (this.#patch < parsedVersion.#patch) {
-      return -1
+      return KeppoComparison.Older
     }
 
-    return 0
+    return KeppoComparison.Current
   }
 
   /**
