@@ -11,7 +11,8 @@
 
 <br>
 
-- **✨ feat**: changes to the `major` or `minor` component now auto-reset the lower components (`minor` / `patch`)
+- **✨ feat**: auto-reset lower components (`minor` / `patch`) when `major` or `minor` changes
+- **✨ feat**: align `SemVer` RegExp with **full** specification compliance
 - **✨ feat**: add a static instantiation helper `Keppo.from()`
 - **✨ feat**: `compareWith()` now returns `KeppoComparison` enum (`Older` = -1, `Current` = 0, `Newer` = 1) instead of raw numbers
 - **✨ feat**: add the `clearLabel()` method
@@ -19,6 +20,7 @@
 
 <br>
 
+- **✅ fix**: improve RegExp performance
 - **✅ fix**: handle negative `version` components properly
 - **✅ fix**: throw narrower `Error` types
 - **✅ fix**: improve SemVer `label` handling
