@@ -286,7 +286,7 @@ describe('🧪 Keppo tests 🧪', () => {
   })
 
   it('#61 invalid label throws', () => {
-    assert.throws(() => new Keppo(1, 0, 0, true, '🔥hotfix'), TypeError)
+    assert.throws(() => new Keppo(1, 0, 0, true, '🔥hotfix'), RangeError)
   })
 
   it('#62 label with numeric suffix', () => {
