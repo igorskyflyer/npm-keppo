@@ -1,9 +1,11 @@
-const SEMVER = '\\d+\\.\\d+\\.\\d+(?:-[a-z]+){0,1}'
-const REGEXP_SEMVER = new RegExp(`^v?${SEMVER}$`)
-const REGEXP_SEMVER_STRICT = new RegExp(`^${SEMVER}$`)
-const REGEXP_COMPONENT = /^\d+$/
-const REGEXP_LABEL = /^([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)$/
-const REGEXP_VERSION: RegExp = /v\.*/
+const SEMVER: string =
+  '\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?'
+
+const REGEXP_SEMVER: RegExp = new RegExp(`^v?${SEMVER}$`)
+const REGEXP_SEMVER_STRICT: RegExp = new RegExp(`^${SEMVER}$`)
+const REGEXP_COMPONENT: RegExp = /^\d+$/
+const REGEXP_LABEL: RegExp = /^[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*$/
+const REGEXP_VERSION: RegExp = /^v/
 
 /**
  * Represents the result of a version comparison between two `Keppo` instances or SemVer strings.
