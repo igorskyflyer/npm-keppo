@@ -27,16 +27,27 @@
 
 ## 🤖 Features
 
-- 🔢 parses and validates SemVer strings like '1.2.3' or 'v2.0.0-alpha'
-- 🧠 supports strict and loose mode for version parsing
-- ⬆️ increases major, minor or patch version safely
-- ⬇️ decreases version components with safety checks
-- 🏷️ sets and formats version labels like 'alpha' or 'beta'
-- 🔍 compares versions and returns -1, 0 or 1
-- 🧪 checks if a version is valid before using it
-- 🧮 calculates max safe increment for each component
-- 🧾 prints version as a string with optional 'v' prefix
-- 🛡️ ensures all components are safe integers
+`Keppo` is a fluent SemVer engine - every method returns the instance, so you can chain mutations like *poetry*:
+
+`keppo.ts`
+```ts
+new Keppo('1.2.3-alpha')
+  .increaseMajor()
+  .setLabel('beta')
+  .decreasePatch()
+  .toString() // → '2.2.2-beta'
+```
+
+- 🔢 Parses & validates **SemVer** strings like `'1.2.3'`, `'v2.0.0-alpha'`
+- 🧠 Strict & loose mode support for flexible parsing
+- ⬆️ Increments major, minor, or patch with auto-reset and safety checks for overflows
+- ⬇️ Decrements safely, never underflows
+- 🏷️ Sets & formats labels like `'alpha'`, `'beta.1'`
+- 🔍 Compares versions and returns `-1`, `0`, or `1`
+- 🧪 Validates version strings before use
+- 🧮 Calculates max safe increment for each component
+- 🧾 Prints version with optional `'v'` prefix
+- 🛡️ Guards against unsafe integers and malformed input
 
 <br>
 <br>
@@ -62,22 +73,34 @@ npm i @igorskyflyer/keppo
 
 ## 🤹🏼 API
 
-
 There are 2 available constructors:
 
 ```ts
-constructor(major?: number = 0, minor?: number = 0, patch?: number = 0, strict?: boolean = true, label?: string  = '')
+constructor(
+  major: number,
+  minor: number,
+  patch: number,
+  strict?: boolean,
+  label?: string
+)
 ```
 
-`major?: number = 0` -> major version number,
+`major: number`
+Major version number (default: `0`).
 
-`minor?: number = 0` => minor version number,
+`minor: number`
+Minor version number (default: `0`).
 
-`patch?: number = 0` => patch version number,
+`patch: number`
+Patch version number (default: `0`).
 
-`strict?: boolean = true` => determines whether the parsing should be strict or not, i.e. use `v` as prefix, e.g. `v1.0.0`,
+`strict?: boolean = true`
+Enables strict parsing mode (default: `true`).
 
-`label?: string = ''` => label for the version, no need to prefix with a dash.
+`label?: string = ''`
+Optional label (e.g. `'alpha'`, `'beta.1'`), no dash prefix needed.
+
+Throws if any component is invalid or violates SemVer rules.
 
 and
 
@@ -85,46 +108,75 @@ and
 constructor(version: string)
 ```
 
-`version: string` => a valid SemVer version string, either in strict or non-strict format, i.e. `1.0.0` or `v1.0.0`, strict mode is inferred from the input string.
+`version: string`
+A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
 
-If any of the parameters in either constructor is not valid, it will throw an appropriate error.
-
-<br>
-<br>
-
-```ts
-parse(version: string): Keppo;
-```
-
-Parses the provided string as a SemVer version.
-
-`version: string` => A valid SemVer version represented as a string, e.g. `"1.2.3"`, `"v1.5.3"`, `"2.3.4-alpha"`, `"v2.4.6-beta"`.
-
-Throws an exception if the passed parameter is not valid.
-
-Returns a new instance of `Keppo` with the parsed version.
+Throws if the string is invalid or fails SemVer parsing.
 
 <br>
 <br>
 
 ```ts
-  isStrict(isStrict?: boolean = true): Keppo
+static from(version: string, strict?: boolean): Keppo
 ```
 
-Sets the strict mode for the SemVer version, i.e. allow `v` as a prefix for SemVer, e.g. `v1.0.0`. By default, strict mode is `true`.
+Creates a new `Keppo` instance from a valid SemVer string.  
+Equivalent to `new Keppo(...).setVersion(version)` but more fluent.
+
+`version: string`
+A valid SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`).
+
+`strict?: boolean` - Optional flag to enable strict parsing mode.
+
+Throws if the version string is invalid.
+
+Returns a fully initialized `Keppo` instance.
 
 <br>
 <br>
 
 ```ts
- increaseMajor(major?: number = 1): Keppo
+static isStrict(isStrict?: boolean = true): Keppo
 ```
 
-Increases the major version number for the provided value.
+Checks whether a given string is a valid SemVer version.  
+Useful for validating a version before calling `setVersion()` or instantiating a `Keppo` instance.
 
-`major: number = 1` => The major version number to increase by, defaults to `1`.
+`version: string` - a SemVer string (e.g. `'1.2.3'`, `'v2.0.0-alpha'`)
 
-Throws an exception if the passed parameter is not valid.
+`isStrict: boolean` - whether to enable strict parsing (default: `true`)
+
+Returns `true` if the version is valid; otherwise `false`
+
+<br>
+<br>
+
+```ts
+setStrict(isStrict: boolean = true): Keppo
+```
+
+Sets the strict mode for SemVer parsing.  
+
+When enabled, version strings must follow strict SemVer format (e.g. no `v` prefix).  
+When disabled, relaxed formats like `v1.0.0` are accepted.  
+
+`isStrict: boolean` - whether to enable strict mode (default: `true`)  
+
+Returns the current `Keppo` instance.
+
+<br>
+<br>
+
+```ts
+increaseMajor(major: number = 1): Keppo
+```
+
+Increases the `major` version number by the specified amount.  
+Resets the `minor` and `patch` components to `0` after incrementing.
+
+`major: number = 1` - the amount to increase by (default: `1`)
+
+Throws if the value is invalid or exceeds safe integer limits.
 
 <br>
 <br>
@@ -133,11 +185,12 @@ Throws an exception if the passed parameter is not valid.
 increaseMinor(minor?: number = 1): Keppo
 ```
 
-Increases the minor version number for the provided value.
+Increases the `minor` version number by the specified amount.  
+Resets the `patch` component to `0` after incrementing.
 
-`minor: number = 1` => The minor version number to increase by, defaults to `1`.
+`minor: number = 1` - the amount to increase by (default: `1`).
 
-Throws an exception if the passed parameter is not valid.
+Throws if the value is invalid or exceeds safe integer limits.
 
 <br>
 <br>
@@ -146,24 +199,25 @@ Throws an exception if the passed parameter is not valid.
 increasePatch(patch?: number = 1): Keppo
 ```
 
-Increases the patch version number for the provided value.
+Increases the patch version number by the specified amount.
 
-`patch: number = 1` => The patch version number to increase by, defaults to `1`.
+`patch: number = 1` - The amount to increase by (default: `1`).
 
-Throws an exception if the passed parameter is not valid.
+Throws if the value is invalid or exceeds safe integer limits.
 
 <br>
 <br>
 
 ```ts
- decreaseMajor(major?: number = 1): Keppo
+decreaseMajor(major?: number = 1): Keppo
 ```
 
-Decreases the major version number for the provided value.
+Decreases the major version number by the specified amount.  
+Resets the minor and patch components to `0` after decrementing.
 
-`major: number = 1` => The major version number to decrease by, defaults to `1`.
+`major: number = 1` - the amount to decrease by (default: `1`).
 
-Throws an exception if the passed parameter is not valid.
+Throws if the value is invalid or results in a negative version.
 
 <br>
 <br>
@@ -245,16 +299,20 @@ Throws an exception if the passed parameter is not valid.
 <br>
 
 ```ts
-compare(version: Keppo | string): number
+compareWith(version: Keppo | string): KeppoComparison
 ```
 
 Compares the current `Keppo` SemVer-compatible version with a provided one. The passed argument can either be another instance of `Keppo` or a valid SemVer string.
 
-Returns a value defined as:
+Returns a value of `KeppoComparison` defined as:
 
 - `-1` if the current instance version is less than the provided version,
 - `0` if the compared versions are equal,
 - `1` if the current instance version is greater than the provided version.
+
+<br>
+
+`KeppoComparison` can be imported for a better DX.
 
 <br>
 <br>
@@ -390,7 +448,7 @@ import { Keppo } from '@igorskyflyer/keppo'
 new Keppo(1, 0, 0).toString() // returns '1.0.0'
 new Keppo(1, 0, 0, true, 'alpha').toString() // returns '1.0.0-alpha'
 new Keppo('1.0.0').increaseMajor(2).toString() // returns '3.0.0'
-new Keppo(1, 0, 0).compare('2.0.0') // returns  -1
+new Keppo(1, 0, 0).compareWith('2.0.0') // returns  -1
 new Keppo('1.0.32').maxIncreasePatch() // returns 9007199254740959
 new Keppo('1.0.1').canIncreasePatch(1) // returns true
 // static method
